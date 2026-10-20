@@ -76,6 +76,7 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
   const previewRef = useRef<HTMLDivElement>(null);
+  const zoomWrapperRef = useRef<HTMLDivElement>(null);
 
   // Current active accent color for UI
   const currentAccent = activeMode === 'facebook-ad' ? adData.accentColor : brochureData.accentColor;
@@ -101,25 +102,55 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
     }
   };
 
+  // Print Handler (opens browser native print / Save as PDF with exact vector styles)
+  const handlePrint = () => {
+    const originalZoom = zoomLevel;
+    if (zoomWrapperRef.current) {
+      zoomWrapperRef.current.style.transform = 'none';
+    }
+    setZoomLevel(100);
+
+    // Give browser time to complete reflow before opening print dialog
+    setTimeout(() => {
+      window.print();
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = `scale(${originalZoom / 100})`;
+      }
+      setZoomLevel(originalZoom);
+    }, 150);
+  };
+
   // Download PDF handler
   const handleDownloadPDF = async () => {
     if (!previewRef.current) return;
     try {
       setIsExporting(true);
-      setExportMessage('Generating high-resolution PDF...');
+      setExportMessage('Generating high-resolution PDF document...');
+
+      // Reset zoom transform temporarily to capture at pristine 1:1 scale
+      const originalZoom = zoomLevel;
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = 'none';
+      }
+
+      await new Promise((r) => setTimeout(r, 80));
 
       const element = previewRef.current;
-      const originalTransform = element.style.transform;
-      element.style.transform = 'none';
 
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
+        allowTaint: true,
         logging: false,
         backgroundColor: null,
+        scrollX: 0,
+        scrollY: 0,
       });
 
-      element.style.transform = originalTransform;
+      // Restore zoom immediately after capture
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = `scale(${originalZoom / 100})`;
+      }
 
       const imgData = canvas.toDataURL('image/png');
 
@@ -135,7 +166,7 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
         const fileName = `${adData.brandName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-facebook-ad.pdf`;
         pdf.save(fileName);
       } else {
-        // Standard A4 Brochure document PDF
+        // Standard A4 Brochure document PDF (210mm x 297mm)
         const pdf = new jsPDF({
           orientation: 'portrait',
           unit: 'mm',
@@ -147,17 +178,23 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
         const imgWidth = pageWidth;
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        let heightLeft = imgHeight;
-        let position = 0;
+        // If the brochure height is close to A4 (within 15% tolerance), scale it neatly to 1 single clean page
+        if (imgHeight <= pageHeight * 1.15) {
+          pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, Math.min(imgHeight, pageHeight));
+        } else {
+          // Genuine multi-page document pagination
+          let heightLeft = imgHeight;
+          let position = 0;
 
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-
-        while (heightLeft > 0) {
-          position = heightLeft - imgHeight;
-          pdf.addPage();
           pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
           heightLeft -= pageHeight;
+
+          while (heightLeft > 5) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+          }
         }
 
         const fileName = `${brochureData.companyName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-services-brochure.pdf`;
@@ -168,9 +205,12 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
       setTimeout(() => {
         setIsExporting(false);
         setExportMessage('');
-      }, 2000);
+      }, 1800);
     } catch (err) {
       console.error('Failed to export PDF:', err);
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = `scale(${zoomLevel / 100})`;
+      }
       setIsExporting(false);
       setExportMessage('');
     }
@@ -187,18 +227,30 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
           : 'Generating high-resolution PNG image...'
       );
 
+      // Reset zoom transform temporarily to capture at pristine 1:1 scale
+      const originalZoom = zoomLevel;
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = 'none';
+      }
+
+      await new Promise((r) => setTimeout(r, 80));
+
       const element = previewRef.current;
-      const originalTransform = element.style.transform;
-      element.style.transform = 'none';
 
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
+        allowTaint: true,
         logging: false,
         backgroundColor: null,
+        scrollX: 0,
+        scrollY: 0,
       });
 
-      element.style.transform = originalTransform;
+      // Restore zoom immediately after capture
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = `scale(${originalZoom / 100})`;
+      }
 
       const imgData = canvas.toDataURL('image/png');
       const link = document.createElement('a');
@@ -217,9 +269,12 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
       setTimeout(() => {
         setIsExporting(false);
         setExportMessage('');
-      }, 2000);
+      }, 1800);
     } catch (err) {
       console.error('Failed to export Image:', err);
+      if (zoomWrapperRef.current) {
+        zoomWrapperRef.current.style.transform = `scale(${zoomLevel / 100})`;
+      }
       setIsExporting(false);
       setExportMessage('');
     }
@@ -333,15 +388,27 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
               type="button"
               onClick={handleDownloadPDF}
               disabled={isExporting}
-              className="px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg active:scale-95 disabled:opacity-50"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-lg active:scale-95 disabled:opacity-50"
               style={{
                 backgroundColor: currentAccent,
                 color: '#000000',
               }}
-              title="Download high-resolution print-ready PDF"
+              title="Download high-resolution print-ready PDF document"
             >
               <Download size={14} strokeWidth={2.5} />
               <span>Download PDF</span>
+            </button>
+
+            {/* Print / Save via Browser Print */}
+            <button
+              type="button"
+              onClick={handlePrint}
+              disabled={isExporting}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-white/15 hover:bg-white/20 border border-white/20 flex items-center gap-1.5 transition-all active:scale-95 disabled:opacity-50 shadow-md"
+              title="Print document or save as vector PDF via system dialog"
+            >
+              <Printer size={14} />
+              <span>Print</span>
             </button>
           </div>
         </div>
@@ -499,41 +566,65 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
                 </span>
               </div>
 
-              {/* Zoom Controls */}
+              {/* Quick Actions & Zoom Controls */}
               <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setZoomLevel((prev) => Math.max(50, prev - 10))}
-                  className="p-1 text-zinc-400 hover:text-white rounded hover:bg-white/5 transition-colors"
-                  title="Zoom Out"
-                >
-                  <ZoomOut size={14} />
-                </button>
-                <span className="font-mono text-[11px] text-zinc-300 w-10 text-center">
-                  {zoomLevel}%
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setZoomLevel((prev) => Math.min(150, prev + 10))}
-                  className="p-1 text-zinc-400 hover:text-white rounded hover:bg-white/5 transition-colors"
-                  title="Zoom In"
-                >
-                  <ZoomIn size={14} />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setZoomLevel(100)}
-                  className="p-1 text-zinc-400 hover:text-white rounded hover:bg-white/5 transition-colors ml-1"
-                  title="Reset Zoom to 100%"
-                >
-                  <RotateCcw size={13} />
-                </button>
+                <div className="flex items-center gap-1 border-r border-white/10 pr-2 mr-1">
+                  <button
+                    type="button"
+                    onClick={handlePrint}
+                    className="px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 text-[11px] font-medium flex items-center gap-1 transition-colors"
+                    title="Print Document or Save as PDF"
+                  >
+                    <Printer size={12} />
+                    <span className="hidden sm:inline">Print</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDownloadPDF}
+                    className="px-2 py-1 rounded-md bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 text-[11px] font-medium flex items-center gap-1 transition-colors"
+                    title="Download PDF File"
+                  >
+                    <Download size={12} />
+                    <span className="hidden sm:inline">PDF</span>
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setZoomLevel((prev) => Math.max(50, prev - 10))}
+                    className="p-1 text-zinc-400 hover:text-white rounded hover:bg-white/5 transition-colors"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut size={14} />
+                  </button>
+                  <span className="font-mono text-[11px] text-zinc-300 w-9 text-center">
+                    {zoomLevel}%
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setZoomLevel((prev) => Math.min(150, prev + 10))}
+                    className="p-1 text-zinc-400 hover:text-white rounded hover:bg-white/5 transition-colors"
+                    title="Zoom In"
+                  >
+                    <ZoomIn size={14} />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setZoomLevel(100)}
+                    className="p-1 text-zinc-400 hover:text-white rounded hover:bg-white/5 transition-colors ml-0.5"
+                    title="Reset Zoom to 100%"
+                  >
+                    <RotateCcw size={12} />
+                  </button>
+                </div>
               </div>
             </div>
 
             {/* Canvas Viewport Container */}
             <div className="w-full flex justify-center bg-[#07080D] border border-white/10 rounded-2xl p-4 sm:p-6 overflow-x-auto shadow-2xl relative">
               <div
+                ref={zoomWrapperRef}
                 style={{
                   transform: `scale(${zoomLevel / 100})`,
                   transformOrigin: 'top center',
@@ -543,6 +634,7 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
               >
                 <div
                   ref={previewRef}
+                  id="brochure-printable-area"
                   className="w-full max-w-[780px] shadow-2xl transition-all"
                 >
                   {activeMode === 'facebook-ad' ? (
@@ -565,17 +657,27 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
                 <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
                 <span>
                   {activeMode === 'facebook-ad'
-                    ? 'Ready for direct upload to Meta / Facebook Ads Manager & Instagram Ads.'
-                    : 'Print-ready A4 formatting with high-contrast text and crisp typography.'}
+                    ? 'Ready for direct upload to Meta Ads Manager, Instagram Ads & Stories.'
+                    : 'A4 document layout calibrated for crisp multi-page printing & direct PDF export.'}
                 </span>
               </div>
-              <button
-                type="button"
-                onClick={handleDownloadImage}
-                className="font-bold underline hover:text-white transition-colors shrink-0"
-              >
-                Download PNG Now →
-              </button>
+              <div className="flex items-center gap-3 shrink-0">
+                <button
+                  type="button"
+                  onClick={handlePrint}
+                  className="font-bold underline hover:text-white transition-colors"
+                >
+                  Print / Save PDF →
+                </button>
+                <span className="text-zinc-600">·</span>
+                <button
+                  type="button"
+                  onClick={handleDownloadPDF}
+                  className="font-bold underline hover:text-white transition-colors"
+                >
+                  Download PDF →
+                </button>
+              </div>
             </div>
           </div>
         </div>

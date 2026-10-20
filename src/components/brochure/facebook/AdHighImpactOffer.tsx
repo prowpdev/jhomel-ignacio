@@ -74,7 +74,29 @@ export const AdHighImpactOffer: React.FC<AdProps> = ({ data }) => {
             </div>
           </div>
 
-          <div className="col-span-5 flex flex-col items-center justify-center p-4 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-md text-center space-y-3">
+          <div className="col-span-5 flex flex-col items-center justify-center p-4 rounded-xl bg-white/[0.04] border border-white/10 backdrop-blur-md text-center space-y-2.5">
+            {data.showPrice && data.price && (
+              <div className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                <div className="text-left">
+                  <span className="text-[9px] font-mono text-zinc-400 block uppercase font-bold">Limited Offer</span>
+                  <div className="flex items-baseline gap-1 font-mono">
+                    <span className="text-lg font-black" style={{ color: accent }}>
+                      {data.currency || '$'}{data.price}
+                    </span>
+                    {data.originalPrice && (
+                      <span className="text-xs text-zinc-500 line-through">
+                        {data.currency || '$'}{data.originalPrice}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                {data.priceDiscountBadge && (
+                  <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/25">
+                    {data.priceDiscountBadge}
+                  </span>
+                )}
+              </div>
+            )}
             <div className="flex items-center gap-1 text-amber-400 text-xs font-bold">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} size={13} fill="currentColor" />
@@ -83,7 +105,7 @@ export const AdHighImpactOffer: React.FC<AdProps> = ({ data }) => {
             </div>
             <button
               type="button"
-              className="w-full py-3 px-4 rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-transform hover:scale-[1.02]"
+              className="w-full py-2.5 px-4 rounded-xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-xl transition-transform hover:scale-[1.02]"
               style={{ backgroundColor: accent, color: '#000000' }}
             >
               <span>{data.ctaText}</span>
@@ -150,8 +172,37 @@ export const AdHighImpactOffer: React.FC<AdProps> = ({ data }) => {
             <span className="font-mono text-[11px] text-zinc-400 truncate">{data.trustBadge}</span>
           </div>
 
+          {/* Special Price Offer Block */}
+          {data.showPrice && data.price && (
+            <div className="p-3 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono uppercase text-zinc-400 font-bold block">
+                  Limited Time Rate
+                </span>
+                <div className="flex items-baseline gap-2 font-mono">
+                  <span className="text-2xl font-black" style={{ color: accent }}>
+                    {data.currency || '$'}{data.price}
+                  </span>
+                  {data.originalPrice && (
+                    <span className="text-sm text-zinc-500 line-through">
+                      {data.currency || '$'}{data.originalPrice}
+                    </span>
+                  )}
+                  <span className="text-xs text-zinc-400">
+                    • {data.pricingPeriod || 'Sprint'}
+                  </span>
+                </div>
+              </div>
+              {data.priceDiscountBadge && (
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                  {data.priceDiscountBadge}
+                </span>
+              )}
+            </div>
+          )}
+
           {/* Call to Action Button */}
-          <div className="pt-2">
+          <div className="pt-1">
             <div
               className="w-full py-3.5 px-6 rounded-xl font-black text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-2xl transition-all hover:brightness-110 cursor-pointer"
               style={{

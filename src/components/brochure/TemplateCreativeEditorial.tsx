@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrochureData } from './types';
 import { ServiceIcon } from './ServiceIcon';
-import { Check, Mail, Phone, Globe, MapPin, Sparkles } from 'lucide-react';
+import { Check, Mail, Phone, Globe, MapPin, Sparkles, ShieldCheck } from 'lucide-react';
 import { BrochureBackgroundLayer } from './facebook/AdBackgroundLayer';
 
 interface TemplateProps {
@@ -136,6 +136,89 @@ export const TemplateCreativeEditorial: React.FC<TemplateProps> = ({ data }) => 
           </div>
         ))}
       </div>
+
+      {/* Editorial Pricing & Rates Matrix */}
+      {data.showPricing && data.pricingTiers && data.pricingTiers.length > 0 && (
+        <div className="mb-8 pt-6 border-t border-zinc-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <span className="text-[10px] font-mono tracking-widest uppercase text-zinc-500 block">
+                [ SECTION 02 : ENGAGEMENT ARCHITECTURE ]
+              </span>
+              <h2 className="text-lg font-bold text-white tracking-tight uppercase">
+                Fixed Investment Tiers ({data.currencyCode || 'USD'})
+              </h2>
+            </div>
+            <span className="font-mono text-xs text-zinc-400">
+              Direct Senior Execution
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {data.pricingTiers.map((tier) => (
+              <div
+                key={tier.id}
+                className="p-5 rounded-lg border border-zinc-800 bg-zinc-900/60 flex flex-col justify-between"
+                style={{
+                  borderColor: tier.isPopular ? accent : undefined,
+                }}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-mono uppercase font-bold text-zinc-300">
+                      {tier.name}
+                    </span>
+                    {tier.isPopular && (
+                      <span
+                        className="px-2 py-0.5 text-[9px] font-mono font-bold uppercase rounded border"
+                        style={{
+                          backgroundColor: `${accent}20`,
+                          color: accent,
+                          borderColor: `${accent}40`,
+                        }}
+                      >
+                        {tier.badge || 'Popular'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-baseline gap-1 font-mono my-2">
+                    <span className="text-2xl sm:text-3xl font-black text-white">
+                      {data.currency || '$'}{tier.price}
+                    </span>
+                    <span className="text-xs text-zinc-500">{tier.period}</span>
+                  </div>
+                  <p className="text-xs text-zinc-400 mb-3">{tier.description}</p>
+                </div>
+
+                <div className="pt-3 border-t border-zinc-800/80">
+                  <ul className="space-y-1.5 text-xs text-zinc-300">
+                    {tier.features.slice(0, 3).map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style={{ backgroundColor: accent }} />
+                        <span className="text-[11px]">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {(data.pricingGuarantee || data.pricingNote) && (
+            <div className="mt-4 p-3 rounded-lg bg-zinc-900/40 border border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-zinc-400 font-mono">
+              {data.pricingGuarantee && (
+                <div className="flex items-center gap-2">
+                  <ShieldCheck size={14} style={{ color: accent }} />
+                  <span>{data.pricingGuarantee}</span>
+                </div>
+              )}
+              {data.pricingNote && (
+                <span className="text-[11px] text-zinc-500">{data.pricingNote}</span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Bottom Editorial Bar */}
       <div className="border-t border-zinc-800 pt-6 mt-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-zinc-500">

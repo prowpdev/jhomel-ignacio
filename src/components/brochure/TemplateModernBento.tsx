@@ -163,6 +163,85 @@ export const TemplateModernBento: React.FC<TemplateProps> = ({ data }) => {
         })}
       </div>
 
+      {/* Bento Pricing Matrix */}
+      {data.showPricing && data.pricingTiers && data.pricingTiers.length > 0 && (
+        <div className="mb-6 pt-6 border-t border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <span className="text-[10px] font-mono uppercase text-emerald-400 font-bold block">
+                Modular Pricing & Engagement
+              </span>
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                Transparent Engineering Tiers ({data.currencyCode || 'USD'})
+              </h2>
+            </div>
+            <div className="text-xs font-mono text-slate-400 bg-slate-900 border border-slate-800 px-3 py-1 rounded-lg">
+              Sub-second Guarantee • Zero Technical Debt
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {data.pricingTiers.map((tier) => (
+              <div
+                key={tier.id}
+                className="bg-[#111726] border border-slate-800 p-5 rounded-2xl flex flex-col justify-between"
+                style={{
+                  borderColor: tier.isPopular ? accent : undefined,
+                }}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-mono uppercase font-bold text-slate-300">
+                      {tier.name}
+                    </span>
+                    {tier.isPopular && (
+                      <span
+                        className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase"
+                        style={{ backgroundColor: `${accent}20`, color: accent }}
+                      >
+                        {tier.badge || 'Popular'}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-baseline gap-1 font-mono my-2">
+                    <span className="text-2xl sm:text-3xl font-black text-white">
+                      {data.currency || '$'}{tier.price}
+                    </span>
+                    <span className="text-xs text-slate-400">{tier.period}</span>
+                  </div>
+                  <p className="text-xs text-slate-400 mb-3">{tier.description}</p>
+                </div>
+
+                <div className="pt-3 border-t border-slate-800/80">
+                  <ul className="space-y-1.5 text-xs text-slate-300">
+                    {tier.features.slice(0, 3).map((feat, fIdx) => (
+                      <li key={fIdx} className="flex items-start gap-2">
+                        <Check size={12} className="mt-0.5 shrink-0" style={{ color: accent }} />
+                        <span className="text-[11px]">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {(data.pricingGuarantee || data.pricingNote) && (
+            <div className="mt-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
+              {data.pricingGuarantee && (
+                <div className="flex items-center gap-2">
+                  <Shield size={14} style={{ color: accent }} />
+                  <span>{data.pricingGuarantee}</span>
+                </div>
+              )}
+              {data.pricingNote && (
+                <span className="text-[11px] font-mono text-slate-400">{data.pricingNote}</span>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Bento Bottom Bar */}
       <div className="bg-[#131926] border border-slate-800 rounded-xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
         <div className="flex items-center gap-2">

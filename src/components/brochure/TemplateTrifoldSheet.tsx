@@ -165,6 +165,80 @@ export const TemplateTrifoldSheet: React.FC<TemplateProps> = ({ data }) => {
                 </div>
               ))}
             </div>
+
+            {/* Tri-fold Pricing Tiers Matrix */}
+            {data.showPricing && data.pricingTiers && data.pricingTiers.length > 0 && (
+              <div className="mt-6 pt-5 border-t border-zinc-200">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-3">
+                  <span className="text-[10px] font-mono uppercase text-zinc-500 font-bold">
+                    Engagement Options & Fixed Scope ({data.currencyCode || 'USD'})
+                  </span>
+                  <span className="text-[11px] font-mono text-zinc-600">
+                    Transparent milestone payments
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {data.pricingTiers.map((tier) => (
+                    <div
+                      key={tier.id}
+                      className="p-4 rounded-xl border border-zinc-200 bg-white flex flex-col justify-between shadow-xs"
+                      style={{
+                        borderColor: tier.isPopular ? accent : undefined,
+                      }}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-xs font-bold text-zinc-800 uppercase">
+                            {tier.name}
+                          </span>
+                          {tier.isPopular && (
+                            <span
+                              className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase"
+                              style={{ backgroundColor: `${accent}15`, color: accent }}
+                            >
+                              Popular
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-baseline gap-1 font-mono my-1.5">
+                          <span className="text-xl font-black text-zinc-900">
+                            {data.currency || '$'}{tier.price}
+                          </span>
+                          <span className="text-xs text-zinc-500">{tier.period}</span>
+                        </div>
+                        <p className="text-[11px] text-zinc-600 mb-2 leading-snug">{tier.description}</p>
+                      </div>
+
+                      <div className="pt-2 border-t border-zinc-100">
+                        <ul className="space-y-1 text-[11px] text-zinc-700">
+                          {tier.features.slice(0, 3).map((feat, fIdx) => (
+                            <li key={fIdx} className="flex items-start gap-1.5">
+                              <Check size={11} className="mt-0.5 shrink-0" style={{ color: accent }} />
+                              <span className="line-clamp-1">{feat}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {(data.pricingGuarantee || data.pricingNote) && (
+                  <div className="mt-3 p-2.5 rounded-lg bg-zinc-100 border border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-1 text-[11px] text-zinc-600">
+                    {data.pricingGuarantee && (
+                      <div className="flex items-center gap-1.5 font-medium">
+                        <ShieldCheck size={13} style={{ color: accent }} />
+                        <span>{data.pricingGuarantee}</span>
+                      </div>
+                    )}
+                    {data.pricingNote && (
+                      <span className="font-mono text-zinc-500">{data.pricingNote}</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Tri-fold Bottom Banner */}

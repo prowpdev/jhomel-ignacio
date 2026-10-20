@@ -105,16 +105,34 @@ export const AdModernBento: React.FC<AdProps> = ({ data }) => {
               ))}
             </div>
 
-            {/* Metric Strip */}
+            {/* Metric & Pricing Strip */}
             <div className="bg-white/[0.05] border border-white/10 rounded-2xl p-3 flex items-center justify-between">
-              <div>
-                <div className="text-lg font-black text-white font-mono">
-                  {data.stats?.[0]?.value || '90+'}
+              {data.showPrice && data.price ? (
+                <div>
+                  <div className="flex items-baseline gap-1.5 font-mono">
+                    <span className="text-lg font-black text-white" style={{ color: accent }}>
+                      {data.currency || '$'}{data.price}
+                    </span>
+                    {data.originalPrice && (
+                      <span className="text-xs text-zinc-500 line-through">
+                        {data.currency || '$'}{data.originalPrice}
+                      </span>
+                    )}
+                  </div>
+                  <div className="text-[10px] text-zinc-400 font-mono">
+                    {data.pricingPeriod || 'Flat Sprint'} {data.priceDiscountBadge ? `• ${data.priceDiscountBadge}` : ''}
+                  </div>
                 </div>
-                <div className="text-[10px] text-zinc-400">
-                  {data.stats?.[0]?.label || 'Lighthouse Speed'}
+              ) : (
+                <div>
+                  <div className="text-lg font-black text-white font-mono">
+                    {data.stats?.[0]?.value || '90+'}
+                  </div>
+                  <div className="text-[10px] text-zinc-400">
+                    {data.stats?.[0]?.label || 'Lighthouse Speed'}
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="text-right">
                 <div className="text-xs font-bold text-amber-400 flex items-center justify-end gap-1">
                   <Star size={11} className="fill-amber-400" />
@@ -165,20 +183,45 @@ export const AdModernBento: React.FC<AdProps> = ({ data }) => {
             ))}
           </div>
 
-          {/* Bento Card 3: Metrics & Trust Bar */}
-          <div className="bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-3.5 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {data.stats?.slice(0, 2).map((st, i) => (
-                <div key={i} className="border-r border-white/10 pr-4 last:border-0 last:pr-0">
-                  <div className="text-base font-black font-mono tracking-tight" style={{ color: accent }}>
-                    {st.value}
+          {/* Bento Card 3: Metrics & Pricing Bar */}
+          <div className="bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-3 sm:p-3.5 flex items-center justify-between gap-3">
+            {data.showPrice && data.price ? (
+              <div className="flex items-center gap-3">
+                <div className="pr-3 border-r border-white/10">
+                  <div className="flex items-baseline gap-1.5 font-mono">
+                    <span className="text-xl sm:text-2xl font-black text-white" style={{ color: accent }}>
+                      {data.currency || '$'}{data.price}
+                    </span>
+                    {data.originalPrice && (
+                      <span className="text-xs text-zinc-500 line-through">
+                        {data.currency || '$'}{data.originalPrice}
+                      </span>
+                    )}
                   </div>
-                  <div className="text-[10px] text-zinc-400">{st.label}</div>
+                  <div className="text-[10px] text-zinc-400 font-mono">
+                    {data.pricingPeriod || 'Flat Sprint'}
+                  </div>
                 </div>
-              ))}
-            </div>
+                {data.priceDiscountBadge && (
+                  <span className="hidden sm:inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                    {data.priceDiscountBadge}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
+                {data.stats?.slice(0, 2).map((st, i) => (
+                  <div key={i} className="border-r border-white/10 pr-4 last:border-0 last:pr-0">
+                    <div className="text-base font-black font-mono tracking-tight" style={{ color: accent }}>
+                      {st.value}
+                    </div>
+                    <div className="text-[10px] text-zinc-400">{st.label}</div>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            <div className="text-right">
+            <div className="text-right shrink-0">
               <div className="text-xs font-bold text-amber-400 flex items-center justify-end gap-1">
                 <Star size={11} className="fill-amber-400" />
                 <Star size={11} className="fill-amber-400" />

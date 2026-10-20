@@ -160,15 +160,50 @@
     linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
 }
 
-/* Print Styles for CV */
+/* Print Styles for CV, Brochures, and Facebook Ads */
 @media print {
-  body {
-    background-color: #FFFFFF !important;
-    color: #000000 !important;
+  @page {
+    size: auto;
+    margin: 0mm;
   }
 
-  header, footer, .print\:hidden {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide app shell chrome during printing */
+  header,
+  nav,
+  aside,
+  footer,
+  .no-print,
+  .print\:hidden,
+  button {
     display: none !important;
+  }
+
+  /* Printable brochure & ad container */
+  #brochure-printable-area {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    transform: none !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  #brochure-printable-area * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   article {
@@ -180,7 +215,6 @@
 
   a {
     text-decoration: none !important;
-    color: #000000 !important;
   }
 }
 
