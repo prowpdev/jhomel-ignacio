@@ -8,8 +8,8 @@ interface NavbarProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
   onOpenInquiry: () => void;
-  activePage: 'portfolio' | 'cv';
-  onNavigate: (page: 'portfolio' | 'cv') => void;
+  activePage: 'portfolio' | 'cv' | 'brochure';
+  onNavigate: (page: 'portfolio' | 'cv' | 'brochure') => void;
 }
 
 const THEMES = [
@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
 
           {/* Zone 2: Clean single-line nav links */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-zinc-600 dark:text-zinc-300">
+          <nav className="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-medium text-zinc-600 dark:text-zinc-300">
             <button
               type="button"
               onClick={() => handleLinkClick('#works')}
@@ -116,6 +116,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <FileText size={14} className={activePage === 'cv' ? 'text-accent' : ''} />
               <span>CV / Resume</span>
+            </button>
+
+            {/* Dedicated Services Brochure & Ads Builder Link */}
+            <button
+              type="button"
+              onClick={() => onNavigate('brochure')}
+              className={`whitespace-nowrap shrink-0 py-1 text-[13px] tracking-wide uppercase font-semibold flex items-center gap-1.5 transition-colors ${
+                activePage === 'brochure'
+                  ? 'text-accent border-b-2 border-accent'
+                  : 'hover:text-zinc-900 dark:hover:text-white text-zinc-800 dark:text-zinc-200'
+              }`}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+              <span>Brochure & Ads</span>
             </button>
 
             <button
@@ -279,6 +293,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <FileText size={16} />
               <span>View Full CV & References</span>
+            </button>
+
+            {/* Mobile Brochure & Ads Builder Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigate('brochure');
+              }}
+              className="text-left text-base font-semibold text-zinc-900 dark:text-white transition-colors py-1 flex items-center gap-2"
+            >
+              <span className="w-2 h-2 rounded-full bg-accent" />
+              <span>Brochure & Ads Builder</span>
             </button>
 
             <button

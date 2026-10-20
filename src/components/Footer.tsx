@@ -4,9 +4,10 @@ import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface FooterProps {
   onNavigateToCV?: () => void;
+  onNavigateToBrochure?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigateToCV }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigateToCV, onNavigateToBrochure }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -35,6 +36,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateToCV }) => {
               >
                 <FileText size={13} />
                 <span>Curriculum Vitae</span>
+              </button>
+            )}
+
+            {onNavigateToBrochure && (
+              <button
+                type="button"
+                onClick={onNavigateToBrochure}
+                className="hover:text-accent font-medium transition-colors flex items-center gap-1.5"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                <span>Services Brochure</span>
               </button>
             )}
 

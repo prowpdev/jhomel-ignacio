@@ -148,13 +148,22 @@ export const CapabilitiesSection: React.FC = () => {
                 <span>Production tested across 31+ real commercial projects</span>
               </div>
 
-              <a
-                href="#works"
-                className="text-accent hover:underline font-mono inline-flex items-center gap-1 self-start sm:self-auto font-medium"
-              >
-                <span>View related client works</span>
-                <ArrowRight size={13} />
-              </a>
+              <div className="flex items-center gap-4">
+                <a
+                  href="#brochure"
+                  className="text-accent hover:underline font-mono inline-flex items-center gap-1 self-start sm:self-auto font-medium"
+                >
+                  <span>Build custom services brochure</span>
+                  <ArrowRight size={13} />
+                </a>
+                <a
+                  href="#works"
+                  className="hover:text-zinc-900 dark:hover:text-white font-mono inline-flex items-center gap-1 self-start sm:self-auto"
+                >
+                  <span>Case studies</span>
+                  <ArrowRight size={13} />
+                </a>
+              </div>
             </div>
 
           </div>

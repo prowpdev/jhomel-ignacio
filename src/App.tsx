@@ -8,23 +8,28 @@ import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { CVPage } from './components/CVPage';
+import { BrochurePage } from './components/brochure/BrochurePage';
 import { ProjectInquiryModal } from './components/ProjectInquiryModal';
 
 export default function App() {
   const [currentTheme, setCurrentTheme] = useState('lime');
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [activePage, setActivePage] = useState<'portfolio' | 'cv'>('portfolio');
+  const [activePage, setActivePage] = useState<'portfolio' | 'cv' | 'brochure'>('portfolio');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
 
   useEffect(() => {
     // Check initial hash
     if (window.location.hash === '#cv') {
       setActivePage('cv');
+    } else if (window.location.hash === '#brochure') {
+      setActivePage('brochure');
     }
 
     const handleHashChange = () => {
       if (window.location.hash === '#cv') {
         setActivePage('cv');
+      } else if (window.location.hash === '#brochure') {
+        setActivePage('brochure');
       } else if (window.location.hash === '#portfolio' || !window.location.hash) {
         setActivePage('portfolio');
       }
@@ -56,10 +61,12 @@ export default function App() {
     setIsDarkMode((prev) => !prev);
   };
 
-  const handleNavigate = (page: 'portfolio' | 'cv') => {
+  const handleNavigate = (page: 'portfolio' | 'cv' | 'brochure') => {
     setActivePage(page);
     if (page === 'cv') {
       window.location.hash = 'cv';
+    } else if (page === 'brochure') {
+      window.location.hash = 'brochure';
     } else {
       window.location.hash = '';
     }
@@ -84,6 +91,12 @@ export default function App() {
         {activePage === 'cv' ? (
           /* Dedicated Curriculum Vitae Page */
           <CVPage
+            onBackToPortfolio={() => handleNavigate('portfolio')}
+            onOpenInquiry={() => setInquiryModalOpen(true)}
+          />
+        ) : activePage === 'brochure' ? (
+          /* Dedicated Services Brochure Creator Page */
+          <BrochurePage
             onBackToPortfolio={() => handleNavigate('portfolio')}
             onOpenInquiry={() => setInquiryModalOpen(true)}
           />
@@ -112,7 +125,10 @@ export default function App() {
       </main>
 
       {/* Quiet Footer */}
-      <Footer onNavigateToCV={() => handleNavigate('cv')} />
+      <Footer
+        onNavigateToCV={() => handleNavigate('cv')}
+        onNavigateToBrochure={() => handleNavigate('brochure')}
+      />
 
       {/* Interactive Project Inquiry Modal */}
       <ProjectInquiryModal
