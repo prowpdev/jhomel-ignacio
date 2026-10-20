@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowUpRight, Menu, X, Sun, Moon } from 'lucide-react';
+import { ArrowUpRight, Menu, X, Sun, Moon, FileText } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface NavbarProps {
@@ -8,6 +8,8 @@ interface NavbarProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
   onOpenInquiry: () => void;
+  activePage: 'portfolio' | 'cv';
+  onNavigate: (page: 'portfolio' | 'cv') => void;
 }
 
 const THEMES = [
@@ -23,6 +25,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   isDarkMode,
   onToggleDarkMode,
   onOpenInquiry,
+  activePage,
+  onNavigate,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -36,17 +40,20 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { label: 'Selected Works', href: '#works' },
-    { label: 'Services & Stack', href: '#capabilities' },
-    { label: 'Methodology', href: '#methodology' },
-    { label: 'About', href: '#about' },
-    { label: 'Contact', href: '#contact' },
-  ];
+  const handleLinkClick = (href: string) => {
+    if (activePage !== 'portfolio') {
+      onNavigate('portfolio');
+      // allow state to update then scroll
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 print:hidden ${
         isScrolled
           ? 'bg-white/90 dark:bg-[#090A0F]/90 backdrop-blur-md border-b border-black/[0.08] dark:border-white/[0.07] py-3.5 shadow-sm dark:shadow-2xl'
           : 'bg-transparent py-5'
@@ -55,26 +62,69 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         {/* Top Bar Contract: 3 zones separated by gap-8 */}
         <div className="flex items-center justify-between gap-8">
+          
           {/* Zone 1: Brand Wordmark */}
-          <a
-            href="#"
-            className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-white whitespace-nowrap shrink-0 transition-transform duration-200 active:scale-98"
+          <button
+            type="button"
+            onClick={() => onNavigate('portfolio')}
+            className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight text-zinc-900 dark:text-white whitespace-nowrap shrink-0 transition-transform duration-200 active:scale-98 text-left"
           >
             <span className="w-2.5 h-2.5 rounded-xs bg-accent transition-transform duration-300 group-hover:rotate-45" />
             <span className="tracking-wider uppercase text-[15px]">JHOMEL IGNACIO</span>
-          </a>
+          </button>
 
           {/* Zone 2: Clean single-line nav links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-600 dark:text-zinc-300">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="whitespace-nowrap shrink-0 hover:text-zinc-900 dark:hover:text-white transition-colors relative py-1 text-[13px] tracking-wide uppercase after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-accent hover:after:w-full after:transition-all after:duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-zinc-600 dark:text-zinc-300">
+            <button
+              type="button"
+              onClick={() => handleLinkClick('#works')}
+              className="whitespace-nowrap shrink-0 hover:text-zinc-900 dark:hover:text-white transition-colors py-1 text-[13px] tracking-wide uppercase"
+            >
+              Selected Works
+            </button>
+            <button
+              type="button"
+              onClick={() => handleLinkClick('#capabilities')}
+              className="whitespace-nowrap shrink-0 hover:text-zinc-900 dark:hover:text-white transition-colors py-1 text-[13px] tracking-wide uppercase"
+            >
+              Services & Stack
+            </button>
+            <button
+              type="button"
+              onClick={() => handleLinkClick('#methodology')}
+              className="whitespace-nowrap shrink-0 hover:text-zinc-900 dark:hover:text-white transition-colors py-1 text-[13px] tracking-wide uppercase"
+            >
+              Methodology
+            </button>
+            <button
+              type="button"
+              onClick={() => handleLinkClick('#about')}
+              className="whitespace-nowrap shrink-0 hover:text-zinc-900 dark:hover:text-white transition-colors py-1 text-[13px] tracking-wide uppercase"
+            >
+              About
+            </button>
+
+            {/* Dedicated CV / Resume Link */}
+            <button
+              type="button"
+              onClick={() => onNavigate('cv')}
+              className={`whitespace-nowrap shrink-0 py-1 text-[13px] tracking-wide uppercase font-semibold flex items-center gap-1.5 transition-colors ${
+                activePage === 'cv'
+                  ? 'text-accent border-b-2 border-accent'
+                  : 'hover:text-zinc-900 dark:hover:text-white text-zinc-800 dark:text-zinc-200'
+              }`}
+            >
+              <FileText size={14} className={activePage === 'cv' ? 'text-accent' : ''} />
+              <span>CV / Resume</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleLinkClick('#contact')}
+              className="whitespace-nowrap shrink-0 hover:text-zinc-900 dark:hover:text-white transition-colors py-1 text-[13px] tracking-wide uppercase"
+            >
+              Contact
+            </button>
           </nav>
 
           {/* Zone 3: Actions + Theme & Light/Dark Toggles */}
@@ -177,16 +227,70 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-[#0D0E15] border-b border-black/10 dark:border-white/10 px-6 py-6 space-y-4 shadow-xl">
           <nav className="flex flex-col space-y-3">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-base font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors py-1"
-              >
-                {link.label}
-              </a>
-            ))}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLinkClick('#works');
+              }}
+              className="text-left text-base font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors py-1"
+            >
+              Selected Works
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLinkClick('#capabilities');
+              }}
+              className="text-left text-base font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors py-1"
+            >
+              Services & Stack
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLinkClick('#methodology');
+              }}
+              className="text-left text-base font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors py-1"
+            >
+              Methodology
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLinkClick('#about');
+              }}
+              className="text-left text-base font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors py-1"
+            >
+              About
+            </button>
+            
+            {/* Mobile CV Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigate('cv');
+              }}
+              className="text-left text-base font-semibold text-accent transition-colors py-1 flex items-center gap-2"
+            >
+              <FileText size={16} />
+              <span>View Full CV & References</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                handleLinkClick('#contact');
+              }}
+              className="text-left text-base font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white transition-colors py-1"
+            >
+              Contact
+            </button>
           </nav>
 
           <div className="pt-4 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">

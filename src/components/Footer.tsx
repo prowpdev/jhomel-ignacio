@@ -1,14 +1,18 @@
 import React from 'react';
-import { ArrowUp, Github, Linkedin, Mail } from 'lucide-react';
+import { ArrowUp, Github, Linkedin, Mail, FileText } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onNavigateToCV?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onNavigateToCV }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <footer className="border-t border-black/[0.08] dark:border-white/[0.08] bg-zinc-100 dark:bg-[#07070A] py-12 text-xs text-zinc-600 dark:text-zinc-500">
+    <footer className="border-t border-black/[0.08] dark:border-white/[0.08] bg-zinc-100 dark:bg-[#07070A] py-12 text-xs text-zinc-600 dark:text-zinc-500 print:hidden">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
           
@@ -22,7 +26,18 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Center / Right: Social Links & Back to top */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-5 sm:gap-6 flex-wrap">
+            {onNavigateToCV && (
+              <button
+                type="button"
+                onClick={onNavigateToCV}
+                className="hover:text-accent font-medium transition-colors flex items-center gap-1"
+              >
+                <FileText size={13} />
+                <span>Curriculum Vitae</span>
+              </button>
+            )}
+
             <a
               href={PERSONAL_INFO.github}
               target="_blank"

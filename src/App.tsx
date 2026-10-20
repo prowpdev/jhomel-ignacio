@@ -7,12 +7,32 @@ import { PhilosophySection } from './components/PhilosophySection';
 import { AboutSection } from './components/AboutSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { CVPage } from './components/CVPage';
 import { ProjectInquiryModal } from './components/ProjectInquiryModal';
 
 export default function App() {
   const [currentTheme, setCurrentTheme] = useState('lime');
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [activePage, setActivePage] = useState<'portfolio' | 'cv'>('portfolio');
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
+
+  useEffect(() => {
+    // Check initial hash
+    if (window.location.hash === '#cv') {
+      setActivePage('cv');
+    }
+
+    const handleHashChange = () => {
+      if (window.location.hash === '#cv') {
+        setActivePage('cv');
+      } else if (window.location.hash === '#portfolio' || !window.location.hash) {
+        setActivePage('portfolio');
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   useEffect(() => {
     // Apply theme data attribute to document element for global CSS variables
@@ -36,6 +56,16 @@ export default function App() {
     setIsDarkMode((prev) => !prev);
   };
 
+  const handleNavigate = (page: 'portfolio' | 'cv') => {
+    setActivePage(page);
+    if (page === 'cv') {
+      window.location.hash = 'cv';
+    } else {
+      window.location.hash = '';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-[#F8F9FB] dark:bg-[#08080B] text-zinc-900 dark:text-[#ECEEF2] selection:bg-accent selection:text-accent-fg relative transition-colors duration-200">
       {/* Top Bar Navigation */}
@@ -45,31 +75,44 @@ export default function App() {
         isDarkMode={isDarkMode}
         onToggleDarkMode={toggleDarkMode}
         onOpenInquiry={() => setInquiryModalOpen(true)}
+        activePage={activePage}
+        onNavigate={handleNavigate}
       />
 
       {/* Main Content Area */}
       <main>
-        {/* Split-Screen Hero with Freelancer Services Heading & Live Project Scope Estimator Form */}
-        <Hero />
+        {activePage === 'cv' ? (
+          /* Dedicated Curriculum Vitae Page */
+          <CVPage
+            onBackToPortfolio={() => handleNavigate('portfolio')}
+            onOpenInquiry={() => setInquiryModalOpen(true)}
+          />
+        ) : (
+          /* Main Freelance Portfolio Views */
+          <>
+            {/* Split-Screen Hero with Freelancer Services Heading & Live Project Scope Estimator Form */}
+            <Hero />
 
-        {/* Selected Works & Case Studies (Bento Grid + Table Directory) */}
-        <ProjectShowcase />
+            {/* Selected Works & Case Studies (Bento Grid with 2 Rows on Col 2 + Table Directory) */}
+            <ProjectShowcase />
 
-        {/* Technical Domains & Freelance Services */}
-        <CapabilitiesSection />
+            {/* Technical Domains & Freelance Services */}
+            <CapabilitiesSection />
 
-        {/* Engineering Philosophy & Delivery Methodology */}
-        <PhilosophySection />
+            {/* Engineering Philosophy & Delivery Methodology */}
+            <PhilosophySection />
 
-        {/* Profile, Background & Verified Track Record */}
-        <AboutSection />
+            {/* Profile, Background & Verified Track Record */}
+            <AboutSection />
 
-        {/* Interactive Consultation / Contact Section */}
-        <ContactSection onOpenInquiry={() => setInquiryModalOpen(true)} />
+            {/* Interactive Consultation / Contact Section */}
+            <ContactSection onOpenInquiry={() => setInquiryModalOpen(true)} />
+          </>
+        )}
       </main>
 
       {/* Quiet Footer */}
-      <Footer />
+      <Footer onNavigateToCV={() => handleNavigate('cv')} />
 
       {/* Interactive Project Inquiry Modal */}
       <ProjectInquiryModal

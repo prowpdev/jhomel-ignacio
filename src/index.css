@@ -159,3 +159,28 @@
     linear-gradient(to right, rgba(0, 0, 0, 0.035) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
 }
+
+/* Print Styles for CV */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+  }
+
+  header, footer, .print\:hidden {
+    display: none !important;
+  }
+
+  article {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+
+  a {
+    text-decoration: none !important;
+    color: #000000 !important;
+  }
+}
+
