@@ -90,15 +90,22 @@ export const TemplateCorporateLight: React.FC<TemplateProps> = ({ data }) => {
                 >
                   <ServiceIcon name={service.icon} size={18} />
                 </div>
-                <span
-                  className="text-xs font-mono font-bold px-2 py-0.5 rounded"
-                  style={{
-                    backgroundColor: `${accent}10`,
-                    color: accent,
-                  }}
-                >
-                  PART 0{index + 1}
-                </span>
+                <div className="flex items-center gap-2">
+                  {data.showPricing && service.price && (
+                    <span className="text-xs font-mono font-bold text-slate-900 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded">
+                      {data.currency || '$'}{service.price}
+                    </span>
+                  )}
+                  <span
+                    className="text-xs font-mono font-bold px-2 py-0.5 rounded"
+                    style={{
+                      backgroundColor: `${accent}10`,
+                      color: accent,
+                    }}
+                  >
+                    PART 0{index + 1}
+                  </span>
+                </div>
               </div>
 
               <h2 className="text-base font-bold text-slate-900 tracking-tight mb-1.5">

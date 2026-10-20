@@ -123,9 +123,16 @@ export const TemplateModernBento: React.FC<TemplateProps> = ({ data }) => {
                   >
                     <ServiceIcon name={service.icon} size={19} />
                   </div>
-                  <span className="text-[11px] font-mono text-slate-500 font-bold">
-                    [0{index + 1}]
-                  </span>
+                  <div className="flex items-center gap-2">
+                    {data.showPricing && service.price && (
+                      <span className="text-xs font-mono font-bold text-white px-2 py-0.5 rounded bg-slate-800 border border-slate-700">
+                        {data.currency || '$'}{service.price}
+                      </span>
+                    )}
+                    <span className="text-[11px] font-mono text-slate-500 font-bold">
+                      [0{index + 1}]
+                    </span>
+                  </div>
                 </div>
 
                 <h2 className="text-sm sm:text-base font-bold text-white tracking-tight mb-2">

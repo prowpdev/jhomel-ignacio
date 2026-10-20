@@ -90,11 +90,25 @@ export const TemplateCreativeEditorial: React.FC<TemplateProps> = ({ data }) => 
                 >
                   0{index + 1}.
                 </span>
-                <div
-                  className="p-1.5 rounded bg-zinc-900 border border-zinc-800"
-                  style={{ color: accent }}
-                >
-                  <ServiceIcon name={service.icon} size={16} />
+                <div className="flex items-center gap-2">
+                  {data.showPricing && service.price && (
+                    <span
+                      className="text-xs font-mono font-bold px-2 py-0.5 rounded border"
+                      style={{
+                        backgroundColor: `${accent}15`,
+                        color: accent,
+                        borderColor: `${accent}30`,
+                      }}
+                    >
+                      {data.currency || '$'}{service.price}
+                    </span>
+                  )}
+                  <div
+                    className="p-1.5 rounded bg-zinc-900 border border-zinc-800"
+                    style={{ color: accent }}
+                  >
+                    <ServiceIcon name={service.icon} size={16} />
+                  </div>
                 </div>
               </div>
 

@@ -40,6 +40,10 @@ interface BrochurePageProps {
 }
 
 const BROCHURE_TEMPLATES: { id: BrochureTemplateId; label: string; tag: string }[] = [
+  { id: 'modern-pricing-matrix', label: 'SaaS & Pricing Matrix', tag: 'Linear Style' },
+  { id: 'swiss-grid-catalog', label: 'Swiss Studio Grid', tag: 'Architectural' },
+  { id: 'split-showcase-luxury', label: 'Split Luxury & Rates', tag: 'Asymmetric' },
+  { id: 'cyber-developer-catalog', label: 'Cyber Tech Stack', tag: 'Developer HUD' },
   { id: 'minimalist-dark', label: 'Minimalist Dark', tag: 'High-Tech Studio' },
   { id: 'corporate-light', label: 'Corporate Light', tag: 'Executive Brief' },
   { id: 'creative-editorial', label: 'Creative Editorial', tag: 'Magazine Layout' },
@@ -56,7 +60,7 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
 
   // Brochure document state
   const [brochureData, setBrochureData] = useState<BrochureData>(DEFAULT_BROCHURE_DATA);
-  const [activeBrochureTemplate, setActiveBrochureTemplate] = useState<BrochureTemplateId>('minimalist-dark');
+  const [activeBrochureTemplate, setActiveBrochureTemplate] = useState<BrochureTemplateId>('modern-pricing-matrix');
 
   // Facebook Ad state
   const [adData, setAdData] = useState<FacebookAdData>(DEFAULT_FACEBOOK_AD_DATA);
@@ -345,9 +349,16 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
         {/* Sub-bar for Brochure Mode: Template Selector */}
         {activeMode === 'brochure' && (
           <div className="max-w-7xl mx-auto mt-3 pt-3 border-t border-white/10 flex items-center justify-between gap-3 overflow-x-auto text-xs">
-            <span className="text-zinc-400 font-mono text-[11px] uppercase tracking-wider shrink-0">
-              5 Document Templates:
-            </span>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-zinc-400 font-mono text-[11px] uppercase tracking-wider">
+                9 Modern Layouts:
+              </span>
+              {brochureData.showPricing && (
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
+                  Rates: {brochureData.currencyCode || 'USD'} ({brochureData.currency || '$'})
+                </span>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               {BROCHURE_TEMPLATES.map((tmpl) => (
                 <button
@@ -394,13 +405,15 @@ export const BrochurePage: React.FC<BrochurePageProps> = ({
             </div>
 
             <div className="flex items-center gap-2 overflow-x-auto py-0.5">
-              <span className="text-[10px] uppercase font-mono text-zinc-400 shrink-0">10 Ad Styles:</span>
+              <span className="text-[10px] uppercase font-mono text-zinc-400 shrink-0">12 Ad Styles:</span>
               <select
                 value={adData.templateId}
                 onChange={(e) => setAdData({ ...adData, templateId: e.target.value as any })}
                 aria-label="Select Ad Style"
-                className="bg-[#171922] border border-white/15 text-white text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-white/30 cursor-pointer"
+                className="bg-[#171922] border border-white/15 text-white text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-white/30 cursor-pointer font-medium"
               >
+                <option value="ad-pricing-offer">💰 Direct Pricing & Sprint Offer</option>
+                <option value="ad-split-showcase">💎 Modern Split Showcase & Rates</option>
                 <option value="ad-modern-bento">🍏 Modern Bento Grid (Apple/Linear)</option>
                 <option value="ad-minimalist-studio">✨ Swiss Studio Clean (Editorial)</option>
                 <option value="ad-social-proof">🏆 Client Proof Spotlight (ROI)</option>

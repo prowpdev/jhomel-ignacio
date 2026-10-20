@@ -10,6 +10,8 @@ import { AdMinimalistStudio } from './AdMinimalistStudio';
 import { AdSocialProofCaseStudy } from './AdSocialProofCaseStudy';
 import { AdVisualCardStack } from './AdVisualCardStack';
 import { AdDarkAuroraNeo } from './AdDarkAuroraNeo';
+import { AdPricingOffer } from './AdPricingOffer';
+import { AdSplitShowcase } from './AdSplitShowcase';
 
 interface FacebookAdRendererProps {
   data: FacebookAdData;
@@ -76,8 +78,12 @@ export const FacebookAdRenderer: React.FC<FacebookAdRendererProps> = ({ data }) 
         return <AdVisualCardStack data={data} />;
       case 'ad-dark-aurora':
         return <AdDarkAuroraNeo data={data} />;
+      case 'ad-pricing-offer':
+        return <AdPricingOffer data={data} />;
+      case 'ad-split-showcase':
+        return <AdSplitShowcase data={data} />;
       default:
-        return <AdHighImpactOffer data={data} />;
+        return <AdPricingOffer data={data} />;
     }
   };
 

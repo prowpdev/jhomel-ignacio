@@ -126,9 +126,16 @@ export const TemplateTrifoldSheet: React.FC<TemplateProps> = ({ data }) => {
                       >
                         <ServiceIcon name={service.icon} size={16} />
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-zinc-400">
-                        OFFERING 0{index + 1}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {data.showPricing && service.price && (
+                          <span className="text-xs font-mono font-bold text-zinc-900 bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded">
+                            {data.currency || '$'}{service.price}
+                          </span>
+                        )}
+                        <span className="text-[10px] font-mono font-bold text-zinc-400">
+                          OFFERING 0{index + 1}
+                        </span>
+                      </div>
                     </div>
 
                     <h3 className="text-sm font-bold text-zinc-900 tracking-tight mb-1.5">

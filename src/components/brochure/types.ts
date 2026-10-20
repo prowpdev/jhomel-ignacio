@@ -4,6 +4,21 @@ export interface BrochureServiceItem {
   description: string;
   icon: string;
   deliverables: string[];
+  price?: string;
+  pricingPeriod?: string;
+  popular?: boolean;
+}
+
+export interface PricingPackage {
+  id: string;
+  name: string;
+  price: string;
+  period: string; // e.g. "/ project", "/ mo", "fixed sprint"
+  description: string;
+  features: string[];
+  isPopular?: boolean;
+  badge?: string; // e.g. "Most Popular", "High ROI", "Enterprise"
+  ctaText?: string;
 }
 
 export interface BackgroundImageConfig {
@@ -22,6 +37,25 @@ export const DEFAULT_BACKGROUND_CONFIG: BackgroundImageConfig = {
   enabled: true,
 };
 
+export interface CurrencyOption {
+  code: string;
+  symbol: string;
+  name: string;
+}
+
+export const CURRENCY_OPTIONS: CurrencyOption[] = [
+  { code: 'USD', symbol: '$', name: 'USD ($)' },
+  { code: 'EUR', symbol: '€', name: 'EUR (€)' },
+  { code: 'GBP', symbol: '£', name: 'GBP (£)' },
+  { code: 'PHP', symbol: '₱', name: 'PHP (₱)' },
+  { code: 'AUD', symbol: 'A$', name: 'AUD (A$)' },
+  { code: 'CAD', symbol: 'C$', name: 'CAD (C$)' },
+  { code: 'SGD', symbol: 'S$', name: 'SGD (S$)' },
+  { code: 'JPY', symbol: '¥', name: 'JPY (¥)' },
+  { code: 'AED', symbol: 'AED', name: 'AED' },
+  { code: 'CHF', symbol: 'CHF', name: 'CHF' },
+];
+
 export interface BrochureData {
   companyName: string;
   tagline: string;
@@ -33,6 +67,13 @@ export interface BrochureData {
   accentColor: string;
   services: BrochureServiceItem[];
   background?: BackgroundImageConfig;
+  // Pricing & Currency Section
+  currency: string;
+  currencyCode: string;
+  showPricing: boolean;
+  pricingTiers?: PricingPackage[];
+  pricingNote?: string;
+  pricingGuarantee?: string;
 }
 
 export type BrochureTemplateId = 
@@ -40,7 +81,11 @@ export type BrochureTemplateId =
   | 'corporate-light'
   | 'creative-editorial'
   | 'modern-bento'
-  | 'trifold-sheet';
+  | 'trifold-sheet'
+  | 'modern-pricing-matrix'
+  | 'swiss-grid-catalog'
+  | 'split-showcase-luxury'
+  | 'cyber-developer-catalog';
 
 export type FacebookAdAspectRatio = '1:1' | '4:5' | '9:16' | '1.91:1';
 
@@ -54,7 +99,9 @@ export type FacebookAdTemplateId =
   | 'ad-minimalist-studio'
   | 'ad-social-proof'
   | 'ad-card-stack'
-  | 'ad-dark-aurora';
+  | 'ad-dark-aurora'
+  | 'ad-pricing-offer'
+  | 'ad-split-showcase';
 
 export interface FacebookAdData {
   badge: string;
@@ -75,7 +122,68 @@ export interface FacebookAdData {
   stats?: { value: string; label: string }[];
   problemBefore?: string[];
   solutionAfter?: string[];
+  // Price Section & Currency
+  showPrice?: boolean;
+  currency?: string;
+  price?: string;
+  originalPrice?: string;
+  pricingPeriod?: string;
+  priceDiscountBadge?: string;
 }
+
+export const DEFAULT_PRICING_PACKAGES: PricingPackage[] = [
+  {
+    id: 'starter',
+    name: 'Starter Sprint',
+    price: '1,490',
+    period: '/ project',
+    description: 'Targeted single-service sprint for speed optimization, bug remediation, or custom landing page launch.',
+    features: [
+      'Single core milestone deliverable',
+      '48-hour turn-around SLA',
+      'Lighthouse 90+ speed guarantee',
+      '14 days post-launch warranty',
+      'Source code handover with docs',
+    ],
+    isPopular: false,
+    badge: 'Fast Turnaround',
+    ctaText: 'Book Starter Sprint',
+  },
+  {
+    id: 'growth',
+    name: 'Full Growth Architecture',
+    price: '3,850',
+    period: '/ project',
+    description: 'Complete bespoke Shopify store or Laravel web application built from ground up to convert.',
+    features: [
+      'Complete end-to-end bespoke development',
+      'Custom theme, checkout logic & APIs',
+      'GA4 eCommerce tracking & Schema SEO',
+      'Direct senior engineer Slack channel',
+      '30 days dedicated warranty & hypercare',
+    ],
+    isPopular: true,
+    badge: 'Most Popular',
+    ctaText: 'Claim Growth Slot',
+  },
+  {
+    id: 'retainer',
+    name: 'Fractional CTO & Retainer',
+    price: '2,900',
+    period: '/ month',
+    description: 'Dedicated monthly engineering bandwidth for continuous iterations, features, and optimizations.',
+    features: [
+      'Dedicated weekly sprint deliverables',
+      'Same-day critical bug response',
+      'Continuous performance & security monitoring',
+      'Weekly architectural review call',
+      'Priority roadmap execution',
+    ],
+    isPopular: false,
+    badge: 'Best Long-Term Value',
+    ctaText: 'Discuss Retainer',
+  },
+];
 
 export const DEFAULT_FACEBOOK_AD_DATA: FacebookAdData = {
   badge: '⚡ LIMITED AVAILABILITY • Q4 CLIENT SPRINT',
@@ -96,7 +204,7 @@ export const DEFAULT_FACEBOOK_AD_DATA: FacebookAdData = {
   contactHandle: 'jhomignacio08@gmail.com',
   accentColor: '#CEFF00',
   aspectRatio: '1:1',
-  templateId: 'ad-high-impact',
+  templateId: 'ad-modern-bento',
   background: {
     imageUrl: '/src/assets/images/bg_dark_liquid_mesh_1792466527701.jpg',
     overlayOpacity: 78,
@@ -119,6 +227,12 @@ export const DEFAULT_FACEBOOK_AD_DATA: FacebookAdData = {
     'Direct Senior Engineer access with daily transparent updates',
     'Full GA4 attribution & Google Tag Manager tracking',
   ],
+  showPrice: true,
+  currency: '$',
+  price: '1,490',
+  originalPrice: '2,490',
+  pricingPeriod: 'Flat-Rate Sprint',
+  priceDiscountBadge: 'Save $1,000 • Only 3 Slots Left',
 };
 
 export const AVAILABLE_ICONS = [
@@ -157,6 +271,13 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
     blur: 0,
     enabled: false,
   },
+  // Pricing & Currency Defaults
+  currency: '$',
+  currencyCode: 'USD',
+  showPricing: true,
+  pricingNote: 'Custom scopes and flexible installment milestones available. 50% upon kickoff, 50% on verified production deployment.',
+  pricingGuarantee: '100% Satisfaction Guarantee • 30 Days Free Warranty • Source Code Ownership',
+  pricingTiers: DEFAULT_PRICING_PACKAGES,
   services: [
     {
       id: '1',
@@ -164,6 +285,9 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
       description:
         'High-converting bespoke Liquid theme architecture, Storefront API integrations, custom checkout workflows, and sub-second speed optimization.',
       icon: 'ShoppingBag',
+      price: '1,490',
+      pricingPeriod: '/ project',
+      popular: true,
       deliverables: [
         'Custom Theme & Sections Architecture',
         'Liquid & Storefront API Integration',
@@ -177,6 +301,9 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
       description:
         'Enterprise web platforms, secure relational database design, REST/GraphQL microservices, queue workers, and reactive Vue/React interfaces.',
       icon: 'Server',
+      price: '2,800',
+      pricingPeriod: '/ project',
+      popular: true,
       deliverables: [
         'Relational Database Modeling (MySQL/Postgres)',
         'Authentication, RBAC & API Endpoints',
@@ -190,6 +317,9 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
       description:
         'Engineered search visibility with structured data, indexation audits, Core Web Vitals remediation, and semantic crawl budget architecture.',
       icon: 'Search',
+      price: '890',
+      pricingPeriod: '/ audit',
+      popular: false,
       deliverables: [
         'JSON-LD Schema.org Structured Markup',
         'Core Web Vitals Remediation (LCP/CLS/INP)',
@@ -203,6 +333,9 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
       description:
         'Comprehensive GA4 setup, GTM container architecture, enhanced eCommerce event attribution, and executive Looker Studio performance dashboards.',
       icon: 'BarChart3',
+      price: '750',
+      pricingPeriod: '/ setup',
+      popular: false,
       deliverables: [
         'GA4 & Google Tag Manager (GTM) Setup',
         'Enhanced eCommerce Funnel Tracking',
@@ -216,6 +349,9 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
       description:
         'Bespoke WordPress theme engineering, tailored plugin development, headless REST API endpoints, and zero-bloat modular code.',
       icon: 'Globe',
+      price: '1,200',
+      pricingPeriod: '/ project',
+      popular: false,
       deliverables: [
         'Bespoke Theme Development (No Bloat)',
         'Custom WordPress Plugins & API Hooks',
@@ -229,6 +365,9 @@ export const DEFAULT_BROCHURE_DATA: BrochureData = {
       description:
         'Practical intelligence integrated into core business operations, OpenAI API model integration, Zapier webhooks, and CRM lead pipelines.',
       icon: 'Sparkles',
+      price: '1,650',
+      pricingPeriod: '/ workflow',
+      popular: false,
       deliverables: [
         'OpenAI API & Model Integrations',
         'Custom Comparison Software Engines',

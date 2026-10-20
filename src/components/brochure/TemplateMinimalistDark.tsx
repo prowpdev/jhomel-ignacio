@@ -100,9 +100,16 @@ export const TemplateMinimalistDark: React.FC<TemplateProps> = ({ data }) => {
                 >
                   <ServiceIcon name={service.icon} size={20} />
                 </div>
-                <span className="text-[11px] font-mono font-bold text-zinc-500">
-                  0{index + 1}
-                </span>
+                <div className="flex items-center gap-2">
+                  {data.showPricing && service.price && (
+                    <span className="text-xs font-mono font-bold text-white px-2 py-0.5 rounded bg-white/10 border border-white/10">
+                      {data.currency || '$'}{service.price}
+                    </span>
+                  )}
+                  <span className="text-[11px] font-mono font-bold text-zinc-500">
+                    0{index + 1}
+                  </span>
+                </div>
               </div>
 
               <h2 className="text-base font-bold text-white tracking-tight mb-2">
@@ -135,6 +142,61 @@ export const TemplateMinimalistDark: React.FC<TemplateProps> = ({ data }) => {
           </div>
         ))}
       </div>
+
+      {/* Pricing Packages Row if enabled */}
+      {data.showPricing && data.pricingTiers && data.pricingTiers.length > 0 && (
+        <div className="relative z-10 mb-8 border border-white/10 rounded-xl p-5 bg-white/[0.02]">
+          <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10">
+            <span className="text-xs font-mono uppercase tracking-wider font-bold text-zinc-300">
+              Fixed Rates & Engagement Packages ({data.currencyCode || 'USD'})
+            </span>
+            <span className="text-[11px] font-mono text-zinc-400">
+              Transparent Milestones
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {data.pricingTiers.map((tier) => (
+              <div
+                key={tier.id}
+                className="p-4 rounded-lg bg-black/40 border border-white/10 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs font-mono font-bold text-white uppercase">
+                      {tier.name}
+                    </span>
+                    {tier.isPopular && (
+                      <span
+                        className="px-2 py-0.5 rounded text-[8px] font-mono font-bold uppercase"
+                        style={{ backgroundColor: accent, color: '#000' }}
+                      >
+                        Popular
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-baseline gap-1 font-mono my-2">
+                    <span className="text-2xl font-black text-white">
+                      {data.currency || '$'}{tier.price}
+                    </span>
+                    <span className="text-xs text-zinc-400">{tier.period}</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-400 mb-3">{tier.description}</p>
+                </div>
+
+                <ul className="space-y-1 pt-2 border-t border-white/10 text-[10px] text-zinc-300">
+                  {tier.features.slice(0, 3).map((feat, fIdx) => (
+                    <li key={fIdx} className="flex items-start gap-1">
+                      <span className="text-emerald-400">✓</span>
+                      <span className="truncate">{feat}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Footer / Call to Action Strip */}
       <div className="relative z-10 border-t border-white/10 pt-6 mt-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-400">
