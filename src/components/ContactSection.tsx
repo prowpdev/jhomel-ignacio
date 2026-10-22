@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Github, Linkedin, ArrowUpRight, Copy, Check, Sparkles } from 'lucide-react';
+import { Mail, Github, Linkedin, ArrowUpRight, Copy, Check, Sparkles, Phone, MapPin } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface ContactSectionProps {
@@ -8,11 +8,18 @@ interface ContactSectionProps {
 
 export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenInquiry }) => {
   const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
+  };
+
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText(PERSONAL_INFO.phone);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2000);
   };
 
   return (
@@ -84,9 +91,36 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenInquiry })
               </h3>
 
               <div className="space-y-3 text-xs">
+                {/* Phone line */}
+                <div className="flex items-center justify-between p-2.5 rounded bg-white dark:bg-black/40 border border-black/[0.05] dark:border-white/[0.05]">
+                  <div className="flex items-center gap-2">
+                    <Phone size={13} className="text-accent" />
+                    <span className="font-mono text-zinc-500 dark:text-zinc-400">Phone:</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <a
+                      href={`tel:${PERSONAL_INFO.phone.replace(/\s+/g, '')}`}
+                      className="text-zinc-900 dark:text-white hover:text-accent font-mono transition-colors font-semibold"
+                    >
+                      {PERSONAL_INFO.phone}
+                    </a>
+                    <button
+                      type="button"
+                      onClick={handleCopyPhone}
+                      className="text-zinc-400 hover:text-accent p-0.5"
+                      title="Copy phone"
+                    >
+                      {copiedPhone ? <Check size={12} className="text-accent" /> : <Copy size={12} />}
+                    </button>
+                  </div>
+                </div>
+
                 {/* Email line */}
                 <div className="flex items-center justify-between p-2.5 rounded bg-white dark:bg-black/40 border border-black/[0.05] dark:border-white/[0.05]">
-                  <span className="font-mono text-zinc-500 dark:text-zinc-400">Primary:</span>
+                  <div className="flex items-center gap-2">
+                    <Mail size={13} className="text-accent" />
+                    <span className="font-mono text-zinc-500 dark:text-zinc-400">Email:</span>
+                  </div>
                   <a
                     href={`mailto:${PERSONAL_INFO.email}`}
                     className="text-zinc-900 dark:text-white hover:text-accent font-mono transition-colors font-medium"
@@ -95,15 +129,15 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenInquiry })
                   </a>
                 </div>
 
-                {/* Secondary email line */}
+                {/* Location line */}
                 <div className="flex items-center justify-between p-2.5 rounded bg-white dark:bg-black/40 border border-black/[0.05] dark:border-white/[0.05]">
-                  <span className="font-mono text-zinc-500 dark:text-zinc-400">Direct:</span>
-                  <a
-                    href={`mailto:${PERSONAL_INFO.secondaryEmail}`}
-                    className="text-zinc-900 dark:text-white hover:text-accent font-mono transition-colors font-medium"
-                  >
-                    {PERSONAL_INFO.secondaryEmail}
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <MapPin size={13} className="text-zinc-400" />
+                    <span className="font-mono text-zinc-500 dark:text-zinc-400">Location:</span>
+                  </div>
+                  <span className="text-zinc-800 dark:text-zinc-200 font-mono text-[11px]">
+                    {PERSONAL_INFO.location}
+                  </span>
                 </div>
 
                 {/* GitHub */}

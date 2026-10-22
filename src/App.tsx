@@ -103,8 +103,11 @@ export default function App() {
         ) : (
           /* Main Freelance Portfolio Views */
           <>
-            {/* Split-Screen Hero with Freelancer Services Heading & Live Project Scope Estimator Form */}
-            <Hero />
+            {/* Developer Portfolio Hero with Animated Constellation Canvas, SVG Circuits & Interactive Spotlight Cockpit */}
+            <Hero
+              onNavigate={handleNavigate}
+              onOpenInquiry={() => setInquiryModalOpen(true)}
+            />
 
             {/* Selected Works & Case Studies (Bento Grid with 2 Rows on Col 2 + Table Directory) */}
             <ProjectShowcase />

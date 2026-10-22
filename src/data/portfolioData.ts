@@ -19,23 +19,45 @@ export interface SkillCategory {
   items: string[];
 }
 
+export interface ExperienceProject {
+  name: string;
+  link?: string;
+  description: string;
+  highlights: string[];
+}
+
+export interface ExperienceItem {
+  company: string;
+  role: string;
+  period: string;
+  employmentType?: string;
+  location: string;
+  summary: string;
+  highlights: string[];
+  projects?: ExperienceProject[];
+  technologies: string[];
+}
+
 export const PERSONAL_INFO = {
-  name: "Jhomel Ignacio",
+  name: "JHOMEL L. IGNACIO",
   handle: "punisher08",
-  role: "Senior Full-Stack Developer & Solutions Architect",
-  location: "Manila, Philippines (Available Globally)",
+  role: "Web Designer & WordPress / Shopify Developer",
+  titleHeadline: "WordPress & Shopify Developer · Full-Stack Web Engineer",
+  address: "Care Zone#5 Tarlac City 2300",
+  location: "Care Zone#5 Tarlac City 2300, Philippines",
+  phone: "+63935 2989 795",
   email: "jhomignacio08@gmail.com",
   secondaryEmail: "jhomignacio.ifliba@gmail.com",
   github: "https://github.com/punisher08",
   linkedin: "https://www.linkedin.com/in/jhomel-ignacio-67b298203",
   bioHeadline: "Developer by craft. Problem solver by nature.",
   bioDescription:
-    "I engineer high-performance web applications, bespoke e-commerce engines, and scalable custom digital platforms. With over 8 years across the stack, I blend robust backend systems in Laravel, PHP, and modern APIs with fluid, interactive interfaces built in React, Vue, and Shopify Liquid.",
+    "Design and develop WordPress and Shopify websites, custom Gutenberg blocks, bespoke Elementor widgets, and scalable web applications. Experienced in building high-performing sites from scratch with minimal plugins, converting Figma designs into clean templates, creating Shopify Liquid sections with Metafields & Metaobjects, and developing custom plugins with OpenAI API integrations.",
   stats: [
-    { value: "31+", label: "Production Projects", context: "Live websites & enterprise apps" },
-    { value: "8+", label: "Years Experience", context: "Full-stack development" },
-    { value: "100%", label: "Custom Architecture", context: "Zero generic template bloat" },
-    { value: "4", label: "Specialized Stacks", context: "Shopify · Laravel · WordPress · React/Vue" },
+    { value: "35+", label: "Production Projects", context: "Live websites, stores & commercial plugins" },
+    { value: "8+", label: "Years Experience", context: "Full-stack web development" },
+    { value: "100%", label: "Custom Architecture", context: "Minimal plugins · Custom blocks & widgets" },
+    { value: "4", label: "Specialized Stacks", context: "Shopify · WordPress · Laravel · Vue/React" },
   ],
 };
 
@@ -56,15 +78,15 @@ export const PROJECTS: Project[] = [
   {
     id: 7,
     title: "Instant Brands Australia",
-    description: "High-volume Shopify Plus storefront for world-renowned kitchen appliance brands including Instant Pot, Corelle, and Pyrex with bespoke theme components and fluid checkout.",
+    description: "Built a fully customized Shopify theme for Instant Brands (Instant Pot, Corelle, Pyrex). Utilized Shopify Metafields to add detailed and dynamic product descriptions and designed custom layouts for page templates.",
     category: "E-commerce",
-    tech: ["Shopify", "Liquid", "PHP", "CSS", "JavaScript"],
+    tech: ["Shopify", "Liquid", "Metafields", "PHP", "CSS", "JavaScript"],
     image: "/assets/portfolio/instantbrand.jpg",
     fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/instantbrand.jpg",
     featured: true,
     link: "https://instantbrands.com.au/",
     year: "2025",
-    role: "Senior Shopify Developer",
+    role: "WordPress / Shopify Developer (OMG)",
   },
   {
     id: 14,
@@ -81,42 +103,42 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 19,
-    title: "WordPress Comparison Engine & AI Plugin",
-    description: "Advanced custom comparison software plugin for WordPress featuring automated spec comparison workflows, Zapier webhooks, and OpenAI integration for product insights.",
+    title: "WordPress Comparison Plugin (WCP)",
+    description: "An aggregator WordPress plugin built to collect, organise, and display content from various sources. Built front-end and backend PHP coding, updated for latest WP releases, and integrated OpenAI API to support automatic unique content generation using GPT-3.x models.",
     category: "Plugin",
-    tech: ["WordPress", "PHP", "REST API", "OpenAI", "Zapier", "jQuery"],
+    tech: ["WordPress", "PHP", "OpenAI API", "REST API", "Zapier", "jQuery"],
     image: "/assets/portfolio/wpcomparison.png",
     fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/wpcomparison.png",
     featured: true,
-    link: "https://wpcomparisonplugin.com",
-    year: "2024",
-    role: "Plugin Architect",
+    link: "https://dev.wordpresscomparisonplugin.com/",
+    year: "2023",
+    role: "Lead Plugin Developer (Netseek)",
   },
   {
     id: 18,
     title: "Beds R Us Australia",
-    description: "High-performing nationwide eCommerce storefront for Australia's largest independent bedding retailer, featuring custom product configurators and store locator integration.",
+    description: "Designed and implemented fully custom WordPress templates tailored to the brand's specific needs and design guidelines. Utilized ACF fields to add dynamic and customizable features throughout the site for easy management of products, promo banners, and key content.",
     category: "E-commerce",
-    tech: ["WordPress", "WooCommerce", "Liquid", "PHP", "JavaScript"],
+    tech: ["WordPress", "WooCommerce", "ACF Pro", "PHP", "JavaScript"],
     image: "/assets/portfolio/bedsrus.jpg",
     fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/bedsrus.jpg",
     featured: true,
     link: "https://bedsrus.com.au/",
     year: "2024",
-    role: "eCommerce Systems Developer",
+    role: "WordPress Developer (OMG)",
   },
   {
     id: 21,
-    title: "Pinoybuilders",
-    description: "National construction and infrastructure intelligence portal combining headless WordPress content architecture with custom REST APIs and reactive Vue.js front-end features.",
-    category: "Web Application",
-    tech: ["WordPress", "REST API", "Vue.js", "PHP", "CSS"],
+    title: "Pinoy Builders",
+    description: "Online construction knowledge hub for seasoned and aspiring design-build experts. Converted Figma designs into WordPress pages and templates using Elementor, integrated Mailchimp CRM for lead generation, and optimized SEO meta elements and Google Ads.",
+    category: "Website",
+    tech: ["WordPress", "Elementor", "Mailchimp", "PHP", "SEO", "CSS"],
     image: "/assets/portfolio/pinoybuilders.png",
     fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/pinoybuilders.png",
     featured: true,
-    link: "https://pinoybuilders.ph",
-    year: "2024",
-    role: "Full-Stack Engineer",
+    link: "https://www.pinoybuilders.ph/",
+    year: "2021",
+    role: "Web Developer (iFormat Logic)",
   },
   {
     id: 24,
@@ -129,20 +151,20 @@ export const PROJECTS: Project[] = [
     featured: true,
     link: "https://www.onlinemarketinggurus.com.au/",
     year: "2024",
-    role: "WordPress & Performance Specialist",
+    role: "WordPress & Performance Specialist (OMG)",
   },
   {
     id: 30,
     title: "Max Brenner Australia",
-    description: "Experiential hospitality & confectionery Shopify eCommerce storefront featuring bespoke animations, interactive gift box builders, and seasonal merchandising.",
+    description: "A fully customized Shopify store for Max Brenner, a chocolate bar restaurant in Australia. Built from the ground up using a custom theme designed to reflect brand identity. All sections custom using our own Theme, with Metaobjects for locations page and Metafields for custom features.",
     category: "E-commerce",
-    tech: ["Shopify", "Liquid", "Vue.js", "PHP", "CSS"],
+    tech: ["Shopify", "Liquid", "Metaobjects", "Metafields", "CSS", "JavaScript"],
     image: "/assets/portfolio/maxbrenner.jpg",
     fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/maxbrenner.jpg",
     featured: true,
-    link: "https://maxbrenner.com.au/",
+    link: "https://max-brenner-cafe.myshopify.com/",
     year: "2024",
-    role: "Shopify & Frontend Engineer",
+    role: "Shopify Developer (OMG)",
   },
   {
     id: 2,
@@ -410,15 +432,68 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 31,
-    title: "Ever Elegant Eveningwear",
-    description: "Designer formalwear and bridal mother-of-the-bride eCommerce storefront with fit guides, virtual appointment booking, and inventory sync.",
+    title: "Ever Elegant",
+    description: "Ensured UI quality and compatibility across web browsers and devices. Tested and validated front-end code to guarantee responsiveness and seamless functionality.",
     category: "E-commerce",
-    tech: ["Shopify", "Liquid", "Vue.js", "PHP", "CSS"],
+    tech: ["WordPress", "Shopify", "Liquid", "PHP", "CSS", "JavaScript"],
     image: "/assets/portfolio/everelegant.png",
     fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/everelegant.png",
     featured: false,
-    link: "https://everelegant.com.au",
+    link: "https://everelegant.com.au/",
     year: "2023",
+    role: "Front-End Developer (Netseek)",
+  },
+  {
+    id: 32,
+    title: "Reality Events",
+    description: "A WordPress WooCommerce with bookable feature. Integrated Booqable rental software for hire products, customized product variations and add-ons, and converted Figma designs into web templates.",
+    category: "E-commerce",
+    tech: ["WordPress", "WooCommerce", "Booqable", "PHP", "Figma", "CSS"],
+    image: "/assets/portfolio/brandedtailor.jpg",
+    fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/brandedtailor.jpg",
+    featured: true,
+    link: "https://realityevents.com.au/",
+    year: "2024",
+    role: "WordPress / WooCommerce Developer (OMG)",
+  },
+  {
+    id: 33,
+    title: "Just Digital Signage",
+    description: "Website development for Australia's leading digital signage solutions innovator. Developed clean, visually captivating, responsive web pages and optimized SEO for organic traffic and engagement.",
+    category: "Website",
+    tech: ["WordPress", "PHP", "CSS", "JavaScript", "Technical SEO"],
+    image: "/assets/portfolio/activeair.jpg",
+    fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/activeair.jpg",
+    featured: false,
+    link: "https://justdigitalsignage.com.au/",
+    year: "2023",
+    role: "WordPress & Front-End Developer (Netseek)",
+  },
+  {
+    id: 34,
+    title: "Petco Direct",
+    description: "A Magento framework selling pet products online. Implemented SEO optimization for pages, products and collections, as well as providing front-end modifications ensuring mobile responsiveness.",
+    category: "E-commerce",
+    tech: ["Magento", "PHP", "CSS", "JavaScript", "SEO"],
+    image: "/assets/portfolio/hydroheadwear.jpg",
+    fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/hydroheadwear.jpg",
+    featured: false,
+    link: "https://petcodirect.com.au/",
+    year: "2021",
+    role: "Web Developer (iFormat Logic)",
+  },
+  {
+    id: 35,
+    title: "Proof Alert Plugin",
+    description: "Customizable popup notification plugin for WordPress front-end with user-friendly administrative settings, updated for latest WordPress core releases.",
+    category: "Plugin",
+    tech: ["WordPress", "PHP", "JavaScript", "REST API", "Zapier"],
+    image: "/assets/portfolio/wpcomparison.png",
+    fallbackImage: "https://punisher08.github.io/vuejs/assets/images/portfolio/wpcomparison.png",
+    featured: false,
+    link: "https://github.com/punisher08",
+    year: "2022",
+    role: "Plugin Developer (Netseek)",
   },
 ];
 
@@ -581,5 +656,299 @@ export const PHILOSOPHY_PRINCIPLES = [
     number: "04",
     title: "Pragmatic Commercial Value",
     description: "Software exists to solve business problems. Every line of code is measured by its impact on user experience, lead conversion, and operational efficiency.",
+  },
+];
+
+export const CV_EXPERIENCES: ExperienceItem[] = [
+  {
+    company: "Summit Web Solutions",
+    role: "Web Designer / Developer",
+    period: "Ongoing (Part time)",
+    employmentType: "Part-time",
+    location: "Remote",
+    summary:
+      "Design and develop WordPress websites, handling everything from UI/UX design to deployment, updates, and ongoing maintenance. I focus on building fast, reliable sites by optimizing performance and page speed, while also managing servers, hosting, DNS, SSL, and overall infrastructure. Frequently work with Elementor, creating custom Elementor widgets to achieve tailored layouts and functionality beyond default components, as well as ACF and WordPress Blocks, converting Figma designs into WordPress pages.",
+    highlights: [
+      "Design and develop WordPress websites, handling everything from UI/UX design in Figma to deployment, updates, and ongoing maintenance.",
+      "Focus on building fast, reliable sites by optimizing performance and page speed, adhering to Google Core Web Vitals.",
+      "Manage end-to-end infrastructure: hosting, Linux servers, DNS routing, SSL certificates, and security updates.",
+      "Frequently work with Elementor, creating custom Elementor widgets to achieve tailored layouts and functionality beyond default components.",
+      "Utilize Advanced Custom Fields (ACF) and WordPress Blocks, converting Figma designs into pixel-perfect, responsive WordPress pages.",
+    ],
+    technologies: [
+      "WordPress",
+      "Elementor (Custom Widgets)",
+      "ACF / ACF Pro",
+      "WordPress Blocks (Gutenberg)",
+      "Figma to WP",
+      "UI/UX Design",
+      "Hosting & Servers",
+      "DNS & SSL",
+      "Page Speed Optimization",
+    ],
+  },
+  {
+    company: "Online Marketing Gurus (OMG)",
+    role: "WordPress / Shopify Developer",
+    period: "August 01, 2023 – September 01, 2025",
+    employmentType: "Full-time",
+    location: "Remote / Agency",
+    summary:
+      "Develop WordPress and Shopify websites, handling updates and maintenance. I optimize site speed and manage DNS and servers for optimal performance. We use tools like ACF and WP Blocks. Convert Figma designs into WordPress blocks and create Shopify liquid sections. We build our WordPress projects using our own WP Theme. We aim to create a website with minimal Plugins so we built our custom blocks in order to provide the needed feature to our projects.",
+    highlights: [
+      "Developed high-traffic WordPress and Shopify websites, handling updates, speed optimization, and server/DNS management for optimal performance.",
+      "Built WordPress projects using our proprietary in-house WP Theme, adhering to a strict minimal-plugin philosophy by engineering bespoke custom blocks for required features.",
+      "Used ACF and WordPress Blocks to convert Figma mockups into responsive, editable custom blocks.",
+      "Created tailored Shopify Liquid sections, page layouts, Metafields, and Metaobjects for high-profile retail brands.",
+      "Integrated eCommerce features including product configurators, custom variations, add-ons, and rental booking software.",
+    ],
+    projects: [
+      {
+        name: "Max Brenner",
+        link: "https://max-brenner-cafe.myshopify.com/",
+        description: "A fully customized Shopify store for Max Brenner, a chocolate bar restaurant in Australia.",
+        highlights: [
+          "The website was built from the ground up using a custom theme designed to reflect the brand identity.",
+          "All sections are custom using our own Theme.",
+          "Used Metaobjects for the locations page.",
+          "Utilize Metafields and Metaobjects to obtain custom features.",
+        ],
+      },
+      {
+        name: "Bedsrus",
+        link: "https://bedsrus.com.au/",
+        description: "Custom WordPress templates for Australia's largest bedding retailer.",
+        highlights: [
+          "Designed and implemented fully custom WordPress templates tailored to the brand's specific needs and design guidelines.",
+          "Utilized ACF fields to add dynamic and customizable features throughout the site, enabling easy management of product details, promotional banners, and other key content.",
+        ],
+      },
+      {
+        name: "Rapha Herbals",
+        link: "https://raphaherbals.com/",
+        description: "Fully customized Shopify storefront for natural remedies & wellness products.",
+        highlights: [
+          "Built a fully customized Shopify theme.",
+          "Utilized Shopify Metafields to add detailed and dynamic product descriptions.",
+          "Designed custom layouts for page templates.",
+        ],
+      },
+      {
+        name: "Instant Brands",
+        link: "https://instantbrands.com.au/",
+        description: "Shopify theme for global kitchenware brands (Instant Pot, Corelle, Pyrex).",
+        highlights: [
+          "Built a fully customized Shopify theme.",
+          "Utilized Shopify Metafields to add detailed and dynamic product descriptions.",
+          "Designed custom layouts for page templates.",
+        ],
+      },
+      {
+        name: "Reality Events",
+        link: "https://realityevents.com.au/",
+        description: "WordPress WooCommerce platform with comprehensive bookable and hire features.",
+        highlights: [
+          "A WordPress WooCommerce with bookable feature.",
+          "Integrate Booqable rental software for hire products.",
+          "Customize product variation and Add ons.",
+          "Convert Figma design to web templates.",
+        ],
+      },
+    ],
+    technologies: [
+      "Shopify",
+      "Liquid",
+      "Metafields & Metaobjects",
+      "WordPress",
+      "Custom WP Theme",
+      "Custom WP Blocks",
+      "ACF Pro",
+      "WooCommerce",
+      "Booqable Rental Software",
+      "Figma",
+      "DNS & Hosting",
+    ],
+  },
+  {
+    company: "Netseek Pty Ltd.",
+    role: "WordPress Developer",
+    period: "October 2021 – July 2023",
+    employmentType: "Full-time",
+    location: "Remote / Australia Client Base",
+    summary:
+      "Creating and updating WordPress websites and maintaining and configuring commercial Wordpress plugins. Additionally, I had the opportunity to develop and expand complex plugins and implement new features of existing plugins, especially holding the lead dev role of a major commercial wordpress plugin called Wordpress Comparison Plugin.",
+    highlights: [
+      "Served as Lead Full-Stack Plugin Developer for major commercial product **Wordpress Comparison Plugin (WCP)**, implementing both front-end and backend coding.",
+      "Contributed on making the Plugin work seamlessly on latest WordPress versions and successfully applied new features.",
+      "Integrated WCP AI engine with OpenAPI to support automatic unique content generation for comparison data, conducting intense experimentation with GPT-3.x models (ada, babbage, curie, davinci).",
+      "Developed and updated **Proof Alert Plugin**, creating customizable popup notifications for front-end interfaces with user-friendly administrative settings.",
+      "Expanded extensive knowledge in WordPress plugin developments, theme creations, and API integrations with Zapier and CRM platforms, strengthening a deep foundation in PHP-based WordPress websites.",
+    ],
+    projects: [
+      {
+        name: "Wordpress Comparison Plugin",
+        link: "https://dev.wordpresscomparisonplugin.com/",
+        description: "An aggregator WordPress plugin built to collect, organise, and display content from various sources.",
+        highlights: [
+          "An aggregator WordPress plugin that can be installed on a WordPress website to build comparison / aggregation functionality.",
+          "Enables website owners to collect, organise, and display content from various sources (e.g. https://example.wordpresscomparisonplugin.com/).",
+          "A Full stack developer implementing front-end and backend coding in creating WordPress Plugin.",
+          "Contributed on making the Plugin work on WordPress latest version and additional features were successfully applied.",
+          "Integrated WCP AI engine with OpenAPI to support automatic unique content generation for comparison data with OpenAI GPT-3 models (ada, babbage, curie, davinci).",
+        ],
+      },
+      {
+        name: "Southern Crossings",
+        link: "https://southern-crossings.com/",
+        description: "Luxury travel agency website specialising in tailor-made trips for Australia, New Zealand, and the South Pacific.",
+        highlights: [
+          "Developed a travel agency website specialising in tailor-made trips for Australia, New Zealand, and the South Pacific.",
+          "Created personalised itineraries to cater to individual preferences and needs.",
+          "Ensuring visually appealing presentation across various devices and optimised SEO meta elements.",
+          "Contributed to the success in obtaining traffic and user engagement.",
+        ],
+      },
+      {
+        name: "Just Digital Signage",
+        link: "https://justdigitalsignage.com.au/",
+        description: "Digital signage solutions website for a leading Australian innovator.",
+        highlights: [
+          "Became part of the development team to create a website for JDS, a leading innovator of digital signage solutions servicing the whole of Australia.",
+          "Played a key role in developing visually captivating and responsive web pages with clean UI.",
+          "Actively contributed to the optimization of the website's SEO, employing effective strategies to enhance search engine visibility and drive organic traffic.",
+          "Delivered a fully functional website for Just Digital Signage that leads to increased engagements.",
+        ],
+      },
+      {
+        name: "Ever Elegant",
+        link: "https://everelegant.com.au/",
+        description: "Formalwear and boutique eCommerce storefront.",
+        highlights: [
+          "Focused on ensuring the quality and compatibility of the user interface across different web browsers and devices.",
+          "Tested and validated front-end code to guarantee responsiveness and seamless functionality.",
+          "Contributed to delivering a consistent and optimised user experience across multiple platforms.",
+        ],
+      },
+      {
+        name: "Proof Alert Plugin",
+        link: "https://github.com/punisher08",
+        description: "Customizable popup notification plugin for user engagement.",
+        highlights: [
+          "A highly impactful project that aimed to elevate website functionality and user engagement.",
+          "Core objective was to provide customisable popup notifications for the front-end interface accompanied by user-friendly settings.",
+          "Modified code and performed front-end updates ensuring functionality works in WordPress latest versions.",
+        ],
+      },
+    ],
+    technologies: [
+      "WordPress Plugin Dev",
+      "PHP (OOP)",
+      "OpenAI API (GPT-3)",
+      "REST APIs",
+      "Zapier Webhooks",
+      "CRM Integrations",
+      "JavaScript / jQuery",
+      "Technical SEO",
+    ],
+  },
+  {
+    company: "IFormat Logic IT Solutions",
+    role: "Full stack Web developer",
+    period: "July 2020 – October 2021",
+    employmentType: "Full-time",
+    location: "Philippines",
+    summary:
+      "During my tenure at iFormat Logic, I embarked on my career as a web developer, devoting myself to gaining the necessary skills to make substantial contributions to the company. Each day, I immersed myself in intensive study and mastery of a wide range of programming languages. In my capacity, I held the responsibility of designing and constructing websites and Plugins from inception, employing fundamental principles of web development. Gained extensive exposure to diverse frameworks (Laravel, Shopify, Magento, Opencart, WordPress) and promoted to oversee a small team of skilled developers.",
+    highlights: [
+      "Held responsibility of designing and constructing websites and plugins from inception, employing fundamental principles of web development.",
+      "Immersed in intensive mastery of wide-ranging programming languages and modern frameworks: Laravel, Shopify, Magento, OpenCart, and WordPress.",
+      "Sharp versatility resulted in promotion to oversee a small team of skilled developers, coordinating client deliveries and architectural standards.",
+      "Delivered fully functional online stores and knowledge portals with custom templates, payment gateways, and CRM sync.",
+    ],
+    projects: [
+      {
+        name: "Pinoy Builders",
+        link: "https://www.pinoybuilders.ph/",
+        description: "Online construction knowledge hub for seasoned and aspiring design-build experts.",
+        highlights: [
+          "Pinoy Builders is an online construction knowledge hub for seasoned and aspiring design-build experts.",
+          "Converted Figma designs into WordPress pages and templates using Elementor Plugin and ensuring mobile responsiveness.",
+          "Integrated Mailchimp CRM in generating leads.",
+          "Ensured SEO meta elements were optimised and Google Ads were properly working.",
+          "Contributed to the success of their website in obtaining traffic, leads and engagement.",
+        ],
+      },
+      {
+        name: "Tea and Coffee Depot",
+        link: "https://teaandcoffeedepot.myshopify.com",
+        description: "Specialty eCommerce Shopify store built from the ground up.",
+        highlights: [
+          "Development of the Tea and Coffee Depot Shopify store, which I built from the ground up.",
+          "Created a bespoke template for the brand's page, expertly incorporating meta fields to augment information.",
+          "Integrated PayMongo payments gateway.",
+          "Delivered fully functional stores and started selling their products online.",
+        ],
+      },
+      {
+        name: "Petco Direct",
+        link: "https://petcodirect.com.au/",
+        description: "Magento framework selling pet products online.",
+        highlights: [
+          "A Magento framework selling pet products online.",
+          "Implemented SEO optimisation for pages, products and collections.",
+          "Provided front-end modifications ensuring mobile responsiveness.",
+          "Contributed to the success in building online stores and selling products online.",
+        ],
+      },
+    ],
+    technologies: [
+      "Laravel",
+      "Shopify",
+      "Magento",
+      "OpenCart",
+      "WordPress",
+      "PHP",
+      "Elementor",
+      "PayMongo Gateway",
+      "Mailchimp CRM",
+      "SEO Meta Tuning",
+    ],
+  },
+  {
+    company: "Tarlac State University",
+    role: "Technical Support Student Assistant & Peer Counselor",
+    period: "August 2016 – June 2019",
+    employmentType: "Student Assistant",
+    location: "Tarlac City, Philippines",
+    summary:
+      "In my capacity, I provide comprehensive technical support to Guidance Counsellors, ensuring their needs are met efficiently. This includes preparing equipment and resources necessary for conducting seminars and student evaluations. Additionally, I had the privilege of serving as a PEER Counsellor, wherein I actively engaged with fellow students by conceptualising and implementing interactive activities. This experience significantly contributed to the development of my self-confidence and interpersonal skills.",
+    highlights: [
+      "Provided comprehensive technical support to Guidance Counselors, ensuring all technical requirements were met efficiently.",
+      "Prepared equipment and digital resources necessary for conducting seminars and student evaluations.",
+      "Served as a PEER Counselor, actively engaging with fellow students by conceptualizing and implementing interactive campus activities.",
+      "Significantly developed self-confidence, interpersonal communication, and team leadership skills.",
+    ],
+    technologies: [
+      "Technical Support",
+      "Systems Administration",
+      "Equipment Preparation",
+      "Student Evaluations",
+      "Peer Counseling & Engagement",
+    ],
+  },
+];
+
+export const CV_EDUCATION = [
+  {
+    institution: "Tarlac State University",
+    degree: "Bachelor of Science in Information Technology (BSIT)",
+    period: "Graduated",
+    location: "Tarlac City, Philippines",
+    description:
+      "Tertiary degree in Software Engineering, Database Systems, Web Systems & Technologies, and Object-Oriented Programming.",
+    highlights: [
+      "Technical Support Student Assistant (August 2016 – June 2019)",
+      "University Guidance Office PEER Counselor",
+    ],
   },
 ];

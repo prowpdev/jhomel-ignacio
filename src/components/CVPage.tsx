@@ -4,21 +4,21 @@ import {
   ArrowLeft, 
   Mail, 
   MapPin, 
+  Phone,
   Github, 
   Linkedin, 
   ExternalLink, 
   Copy, 
   Check, 
-  Calendar, 
   Briefcase, 
   GraduationCap, 
   UserCheck, 
-  Code, 
+  Code2, 
   Sparkles,
-  Download,
-  Share2
+  Layers,
+  Globe
 } from 'lucide-react';
-import { PERSONAL_INFO, PROJECTS, SKILL_CATEGORIES } from '../data/portfolioData';
+import { PERSONAL_INFO, PROJECTS, CV_EXPERIENCES, CV_EDUCATION } from '../data/portfolioData';
 
 interface CVPageProps {
   onBackToPortfolio: () => void;
@@ -27,7 +27,7 @@ interface CVPageProps {
 
 export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry }) => {
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [copiedText, setCopiedText] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
   const handlePrint = () => {
     window.print();
@@ -39,77 +39,33 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const experienceHistory = [
-    {
-      role: 'Senior Full-Stack Developer & Solutions Architect',
-      company: 'Independent Technical Consultant / Freelance',
-      period: '2021 – Present',
-      location: 'Remote (Clients across Australia, US, and Asia)',
-      summary:
-        'Deliver end-to-end web engineering, custom Shopify Plus themes, bespoke Laravel web applications, and automated integrations for high-growth direct-to-consumer brands and digital agencies.',
-      achievements: [
-        'Architected and delivered custom Shopify Plus storefronts for high-profile Australian retailers including Instant Brands (Corelle, Pyrex, Instant Pot) and Beds R Us Australia with sub-second page performance.',
-        'Engineered full-stack Laravel enterprise platforms (e.g. Nappy Co, Supermpower) with tailored relational database schemas, queue processing, and reactive Vue.js client dashboards.',
-        'Developed custom WordPress plugins integrating OpenAI API, Zapier webhooks, and Google Analytics 4 Data APIs for automated catalog comparisons and internal reporting.',
-        'Implemented comprehensive Google Analytics 4 (GA4) with Google Tag Manager (GTM) enhanced eCommerce tracking, conversion funnels, and technical SEO schema architecture.',
-        'Reduced Core Web Vitals Largest Contentful Paint (LCP) from 3.8s to <1.2s across 15+ client platforms via code splitting, asset optimization, and edge caching.',
-      ],
-      technologies: ['Shopify Plus', 'Liquid', 'Laravel', 'PHP', 'Vue.js', 'React', 'MySQL', 'GA4', 'Technical SEO', 'Docker'],
-    },
-    {
-      role: 'Lead Web Developer & Systems Architect',
-      company: 'Digital Agencies & Enterprise Contracts',
-      period: '2018 – 2021',
-      location: 'Manila, Philippines (Global Client Base)',
-      summary:
-        'Led front-end and full-stack development initiatives for over 25 commercial portals, eCommerce businesses, and corporate web platforms.',
-      achievements: [
-        'Supervised end-to-end theme development and CMS migrations for major regional clients including Norweld Australia, Active Air Solutions, and Rivergum Homes.',
-        'Engineered custom REST API endpoints linking headless content management systems to external CRM pipelines and enterprise ERP inventory systems.',
-        'Spearheaded modern responsive UI standards using modular CSS and vanilla JavaScript, eliminating heavy third-party plugin dependencies.',
-        'Standardized Git workflows, code reviews, staging environments, and Cloudflare security deployments across development squads.',
-      ],
-      technologies: ['WordPress', 'PHP', 'WooCommerce', 'JavaScript', 'REST APIs', 'Cloudflare', 'Linux', 'Git'],
-    },
-    {
-      role: 'Full-Stack Developer & Trainee Lead',
-      company: 'Web Systems & Agency Trainee Program',
-      period: '2016 – 2018',
-      location: 'Philippines',
-      summary:
-        'Developed custom PHP/MySQL data-driven applications, created interactive web modules, and mentored emerging web developers.',
-      achievements: [
-        'Built full-stack CRUD applications using PHP, AJAX, and relational databases for corporate intranets and client reporting portals.',
-        'Led technical workshops and created instructional materials covering Vue.js components, Vuetify Material Design, and Firebase realtime integrations.',
-        'Authored and maintained multiple open-source repositories and utility libraries on GitHub (@punisher08).',
-      ],
-      technologies: ['PHP', 'MySQL', 'JavaScript', 'AJAX', 'Vue.js', 'HTML5/CSS3', 'Firebase'],
-    },
-  ];
-
-  const featuredCVProjects = PROJECTS.filter((p) => p.featured).slice(0, 6);
+  const handleCopyPhone = () => {
+    navigator.clipboard.writeText(PERSONAL_INFO.phone);
+    setCopiedPhone(true);
+    setTimeout(() => setCopiedPhone(false), 2000);
+  };
 
   const references = [
     {
-      name: 'Agency Technical Lead',
-      relationship: 'Managing Partner & Technical Director',
-      organization: 'Digital Performance & Growth Agency (Australia)',
-      context: 'Collaborated on 10+ high-profile Australian client builds including Online Marketing Gurus and Norweld.',
-      contactStatus: 'Contact details and letter of recommendation available on request.',
+      name: 'Technical Director & Delivery Lead',
+      relationship: 'Agency Supervisor & Direct Client Lead',
+      organization: 'Online Marketing Gurus (OMG) / Australian Brands',
+      context: 'Direct collaboration on high-traffic Shopify stores (Max Brenner, Instant Brands, Rapha Herbals) and custom WordPress projects (Bedsrus, Reality Events).',
+      contactStatus: 'Direct contact details and reference check available upon request.',
     },
     {
-      name: 'eCommerce Operations Lead',
-      relationship: 'Director of Digital Products',
-      organization: 'Direct-to-Consumer Retail Group (Australia / Global)',
-      context: 'Direct collaboration on Shopify Plus storefront architecture, custom theme sections, and checkout optimization.',
-      contactStatus: 'Direct contact phone & email available upon request.',
+      name: 'Commercial Software & Lead Engineer',
+      relationship: 'Engineering Supervisor & Plugin Architect',
+      organization: 'Netseek Pty Ltd. (Australia)',
+      context: 'Led development on commercial WordPress Comparison Plugin (WCP) with OpenAI API GPT-3 integration, Proof Alert Plugin, and bespoke Australian client portals.',
+      contactStatus: 'Letter of recommendation and verification available on request.',
     },
     {
-      name: 'Software Engineering Manager',
-      relationship: 'Senior Engineering Peer & Client Lead',
-      organization: 'Web Systems & Enterprise Solutions (Manila / Remote)',
-      context: 'Long-term peer collaboration on custom Laravel applications, RESTful microservices, and database migrations.',
-      contactStatus: 'Verified LinkedIn recommendation available at linkedin.com/in/jhomel-ignacio-67b298203.',
+      name: 'Engineering Director & Senior Mentor',
+      relationship: 'Former Technical Lead & Department Head',
+      organization: 'iFormat Logic IT Solutions',
+      context: 'Supervised full-stack web builds across Laravel, Shopify, Magento, OpenCart, and WordPress, resulting in promotion to lead a small squad of developers.',
+      contactStatus: 'Verified endorsement and references available upon request.',
     },
   ];
 
@@ -172,23 +128,60 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
               <p className="font-display text-lg sm:text-xl font-medium text-accent mt-1">
                 {PERSONAL_INFO.role}
               </p>
+
+              <p className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-1">
+                Specializing in WordPress (Custom Blocks & Themes) & Shopify (Liquid, Metafields & Metaobjects)
+              </p>
             </div>
 
             {/* Contact Details Column */}
-            <div className="space-y-1.5 text-xs font-mono text-zinc-600 dark:text-zinc-400 self-start">
+            <div className="space-y-2 text-xs font-mono text-zinc-600 dark:text-zinc-400 self-start bg-zinc-50/70 dark:bg-[#141520]/70 p-4 rounded-xl border border-black/[0.06] dark:border-white/[0.06] print:bg-transparent print:p-0 print:border-none">
+              
               <div className="flex items-center gap-2">
-                <MapPin size={13} className="text-zinc-400 shrink-0" />
-                <span>Manila, Philippines (Available Globally / Remote)</span>
+                <MapPin size={13} className="text-accent shrink-0" />
+                <span>{PERSONAL_INFO.address}, Philippines</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail size={13} className="text-zinc-400 shrink-0" />
-                <a
-                  href={`mailto:${PERSONAL_INFO.email}`}
-                  className="text-zinc-900 dark:text-white hover:text-accent font-medium underline"
+
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <Phone size={13} className="text-accent shrink-0" />
+                  <a
+                    href={`tel:${PERSONAL_INFO.phone.replace(/\s+/g, '')}`}
+                    className="text-zinc-900 dark:text-white hover:text-accent font-semibold"
+                  >
+                    {PERSONAL_INFO.phone}
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyPhone}
+                  className="print:hidden text-zinc-400 hover:text-accent"
+                  title="Copy phone"
                 >
-                  {PERSONAL_INFO.email}
-                </a>
+                  {copiedPhone ? <Check size={12} className="text-accent" /> : <Copy size={12} />}
+                </button>
               </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <Mail size={13} className="text-accent shrink-0" />
+                  <a
+                    href={`mailto:${PERSONAL_INFO.email}`}
+                    className="text-zinc-900 dark:text-white hover:text-accent font-medium underline"
+                  >
+                    {PERSONAL_INFO.email}
+                  </a>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="print:hidden text-zinc-400 hover:text-accent"
+                  title="Copy email"
+                >
+                  {copiedEmail ? <Check size={12} className="text-accent" /> : <Copy size={12} />}
+                </button>
+              </div>
+
               <div className="flex items-center gap-2">
                 <Github size={13} className="text-zinc-400 shrink-0" />
                 <a
@@ -200,6 +193,7 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
                   github.com/punisher08
                 </a>
               </div>
+
               <div className="flex items-center gap-2">
                 <Linkedin size={13} className="text-blue-500 shrink-0" />
                 <a
@@ -221,7 +215,7 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
             <span className="text-accent">01.</span> Executive Technical Summary
           </h2>
           <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-            Senior Full-Stack Engineer and Solutions Architect with over <span className="font-semibold text-zinc-900 dark:text-white">8+ years</span> of verified production experience architecting high-volume eCommerce platforms, custom Laravel web applications, bespoke WordPress portals, and automated data pipelines. Recognized for bridging high-scale backend logic with fluid, accessible frontends. Proven track record collaborating directly with founders, CTOs, and agencies across Australia, the United States, and Asia on 31+ production commercial launches.
+            Web Designer and WordPress / Shopify Developer with extensive commercial experience designing, developing, and deploying high-performance eCommerce platforms, custom WordPress themes & blocks, bespoke Elementor widgets, and commercial WordPress plugins. Proven track record across <span className="font-semibold text-zinc-900 dark:text-white">Summit Web Solutions</span>, <span className="font-semibold text-zinc-900 dark:text-white">Online Marketing Gurus (OMG)</span>, <span className="font-semibold text-zinc-900 dark:text-white">Netseek Pty Ltd.</span>, and <span className="font-semibold text-zinc-900 dark:text-white">iFormat Logic</span>—handling full-cycle development from Figma UI/UX to server infrastructure, ACF, Shopify Metafields & Metaobjects, OpenAI GPT-3 API integrations, and leading development teams.
           </p>
         </section>
 
@@ -232,59 +226,61 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+            
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                E-Commerce & CMS
+                WordPress & Block Architecture
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Shopify Plus, Liquid, Storefront API, Custom Checkout, WooCommerce, WordPress Architecture, Oxygen Builder, ACF Pro, Headless CMS.
+                Custom In-House WP Themes, Custom Gutenberg Blocks, Elementor (Custom Widgets), Advanced Custom Fields (ACF Pro), Minimal Plugin Architecture, WooCommerce.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                Backend & Databases
+                Shopify Development
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                PHP (7/8), Laravel Framework, RESTful APIs, MySQL, PostgreSQL, Python, Django, Elixir/Phoenix, Queue Workers, Redis.
+                Custom Shopify Themes from scratch, Liquid Sections & Templates, Metafields & Metaobjects, Storefront Customization, PayMongo & Payment Integrations.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                Frontend & UI Engineering
+                Figma to Web & UI/UX
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Vue.js (2/3), React, TypeScript, JavaScript (ES6+), Vite, Tailwind CSS v4, Motion, Responsive Mobile-First UX, Web Accessibility (WCAG).
+                Pixel-perfect Figma to WordPress blocks conversion, Figma to Shopify liquid, UI/UX prototyping, responsive design across mobile/desktop, cross-browser QA.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                SEO & Analytics
+                Full-Stack & Commercial Plugins
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Google Analytics 4 (GA4), Google Tag Manager (GTM), Technical SEO Audits, Schema.org JSON-LD, Core Web Vitals (LCP/CLS/INP), Looker Studio.
+                Commercial WordPress Plugin Development (WCP Aggregator, Proof Alert), PHP (OOP), Laravel, Magento, OpenCart, RESTful APIs, MySQL, Booqable Rental Software.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                AI & Workflow Automation
+                AI & Workflow Integrations
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                OpenAI API, Custom Comparison Engines, Prompt Engineering, Zapier Webhooks, GoHighLevel (GHL) CRM Pipelines & SMS/Email sequences.
+                OpenAI API Engine (GPT-3: ada, babbage, curie, davinci) for automated unique content generation, Zapier Webhooks, Mailchimp CRM, Lead Capture Funnels.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                DevOps & Infrastructure
+                Infrastructure & Performance
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Linux Server Admin, Docker, Git/GitHub, Cloudflare CDN, DNS & SSL Routing, Nginx/Apache Tuning, Pantheon.io, CI/CD pipelines.
+                Page Speed & Core Web Vitals optimization, Server & Hosting Management, DNS Routing, SSL Configuration, Technical SEO Meta elements & Google Ads setup.
               </p>
             </div>
+
           </div>
         </section>
 
@@ -294,48 +290,112 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
             <span className="text-accent">03.</span> Professional Experience
           </h2>
 
-          <div className="space-y-8">
-            {experienceHistory.map((exp, idx) => (
-              <div key={idx} className="relative pl-6 border-l-2 border-accent/40">
+          <div className="space-y-10">
+            {CV_EXPERIENCES.map((exp, idx) => (
+              <div 
+                key={idx} 
+                className="relative pl-6 border-l-2 border-accent/40 break-inside-avoid print:mb-6"
+              >
                 <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-accent" />
 
+                {/* Role Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
-                  <h3 className="font-display text-lg font-bold text-zinc-900 dark:text-white">
-                    {exp.role}
-                  </h3>
-                  <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-display text-lg font-bold text-zinc-900 dark:text-white">
+                      {exp.role}
+                    </h3>
+                    {exp.employmentType && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-accent/15 text-accent border border-accent/20">
+                        {exp.employmentType}
+                      </span>
+                    )}
+                  </div>
+                  <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                     {exp.period}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs font-mono text-accent mb-3">
+                {/* Company & Location */}
+                <div className="flex items-center gap-2 text-xs font-mono text-accent mb-3 font-semibold">
                   <span>{exp.company}</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="text-zinc-500 dark:text-zinc-400">{exp.location}</span>
+                  <span aria-hidden="true" className="text-zinc-400">·</span>
+                  <span className="text-zinc-500 dark:text-zinc-400 font-normal">{exp.location}</span>
                 </div>
 
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 mb-3 italic">
+                {/* Summary */}
+                <p className="text-xs text-zinc-700 dark:text-zinc-300 mb-3 leading-relaxed">
                   {exp.summary}
                 </p>
 
+                {/* Key Achievements Bullet Points */}
                 <ul className="space-y-1.5 mb-4 text-xs text-zinc-700 dark:text-zinc-300 list-disc list-outside ml-4">
-                  {exp.achievements.map((item, i) => (
+                  {exp.highlights.map((item, i) => (
                     <li key={i} className="leading-relaxed">
                       {item}
                     </li>
                   ))}
                 </ul>
 
-                <div className="flex flex-wrap gap-1.5 pt-1">
+                {/* Delivered Client Projects (if any) */}
+                {exp.projects && exp.projects.length > 0 && (
+                  <div className="mb-4 mt-3 pt-3 border-t border-black/[0.06] dark:border-white/[0.06]">
+                    <div className="flex items-center gap-1.5 text-xs font-mono font-semibold text-zinc-800 dark:text-zinc-200 mb-2.5">
+                      <Globe size={13} className="text-accent" />
+                      <span>Delivered Client Projects & Implementations:</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-2.5">
+                      {exp.projects.map((proj, pIdx) => (
+                        <div 
+                          key={pIdx} 
+                          className="p-3 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.05] dark:border-white/[0.05] text-xs"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-1 mb-1">
+                            <span className="font-semibold text-zinc-900 dark:text-white font-display">
+                              {proj.name}
+                            </span>
+                            {proj.link && (
+                              <a
+                                href={proj.link}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-accent hover:underline flex items-center gap-1 font-mono text-[11px]"
+                              >
+                                <span>{proj.link.replace(/^https?:\/\//, '').replace(/\/$/, '')}</span>
+                                <ExternalLink size={10} />
+                              </a>
+                            )}
+                          </div>
+
+                          <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mb-1.5 italic">
+                            {proj.description}
+                          </p>
+
+                          <ul className="space-y-1 list-disc list-outside ml-4 text-[11px] text-zinc-700 dark:text-zinc-300">
+                            {proj.highlights.map((hl, hIdx) => (
+                              <li key={hIdx} className="leading-snug">
+                                {hl}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Technologies tags */}
+                <div className="flex flex-wrap gap-1.5 pt-2">
                   {exp.technologies.map((tech, tIdx) => (
                     <span
                       key={tIdx}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/[0.04] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400"
+                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-black/[0.04] dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 border border-black/[0.05] dark:border-white/[0.05]"
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
+
               </div>
             ))}
           </div>
@@ -348,7 +408,7 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
           </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            {featuredCVProjects.map((p) => (
+            {PROJECTS.filter((p) => p.featured).slice(0, 6).map((p) => (
               <div
                 key={p.id}
                 className="p-4 rounded-xl bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06] flex flex-col justify-between"
@@ -397,37 +457,40 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
         {/* Section 5: Education & Credentials */}
         <section className="mb-10 print:mb-6">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-4 flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.06] pb-2 font-semibold">
-            <span className="text-accent">05.</span> Education & Continuous Learning
+            <span className="text-accent">05.</span> Education & Campus Leadership
           </h2>
 
           <div className="space-y-3 text-xs">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
-              <div>
-                <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-white">
-                  Bachelor of Science in Information Technology (BSIT)
-                </h3>
-                <p className="text-zinc-600 dark:text-zinc-400 mt-0.5">
-                  Tertiary Degree in Software Engineering, Databases & Web Architecture · Philippines
-                </p>
-              </div>
-              <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400 mt-1 sm:mt-0">
-                Graduated
-              </span>
-            </div>
+            {CV_EDUCATION.map((edu, eIdx) => (
+              <div 
+                key={eIdx}
+                className="p-4 rounded-xl bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                  <div>
+                    <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-white">
+                      {edu.degree}
+                    </h3>
+                    <p className="text-zinc-600 dark:text-zinc-400 mt-0.5 font-medium">
+                      {edu.institution} · {edu.location}
+                    </p>
+                  </div>
+                  <span className="font-mono text-xs text-accent font-semibold mt-1 sm:mt-0">
+                    {edu.period}
+                  </span>
+                </div>
 
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
-              <div>
-                <h3 className="font-display text-sm font-bold text-zinc-900 dark:text-white">
-                  Specialized Industry Training & Architecture Audits
-                </h3>
-                <p className="text-zinc-600 dark:text-zinc-400 mt-0.5">
-                  Shopify Plus Theme Engineering · Advanced Laravel Domain Patterns · Google Analytics 4 (GA4) Analytics · Web Performance Audits
+                <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-2">
+                  {edu.description}
                 </p>
+
+                <ul className="space-y-1 mt-2.5 list-disc list-outside ml-4 text-xs text-zinc-700 dark:text-zinc-300">
+                  {edu.highlights.map((h, i) => (
+                    <li key={i}>{h}</li>
+                  ))}
+                </ul>
               </div>
-              <span className="font-mono text-xs text-accent font-semibold mt-1 sm:mt-0">
-                Continuous Professional Development
-              </span>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -471,8 +534,8 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
 
         {/* Document Footer */}
         <footer className="pt-6 border-t border-black/[0.08] dark:border-white/[0.08] flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-500 font-mono gap-3">
-          <span>Curriculum Vitae · Jhomel Ignacio (punisher08)</span>
-          <span>Verified Online: jhomelignacio.portfolio</span>
+          <span>Curriculum Vitae · {PERSONAL_INFO.name} ({PERSONAL_INFO.handle})</span>
+          <span>Contact: {PERSONAL_INFO.phone} · {PERSONAL_INFO.email}</span>
         </footer>
 
       </article>

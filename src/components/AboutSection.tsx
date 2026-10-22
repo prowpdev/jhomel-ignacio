@@ -22,7 +22,7 @@ export const AboutSection: React.FC = () => {
 
           <div className="flex items-center gap-2 text-xs font-mono text-zinc-600 dark:text-zinc-400">
             <MapPin size={14} className="text-accent" />
-            <span>Manila, Philippines (Available Globally)</span>
+            <span>Care Zone#5 Tarlac City 2300, Philippines (Available Globally / Remote)</span>
           </div>
         </div>
 
