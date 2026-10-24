@@ -1,160 +1,152 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { 
   ArrowDown, 
-  ArrowUpRight, 
   ExternalLink, 
   Code2, 
-  Terminal, 
-  Layers, 
-  Zap, 
   Sparkles, 
   Globe, 
-  CheckCircle2, 
-  Copy, 
-  Check, 
-  Laptop, 
-  Cpu, 
   Compass, 
-  Flame,
-  FileText,
-  Activity,
-  Boxes,
-  Maximize2
+  FileText, 
+  Activity, 
+  Boxes, 
+  ChevronLeft, 
+  ChevronRight, 
+  Play, 
+  Pause, 
+  Layers, 
+  Zap,
+  CheckCircle2,
+  MousePointerClick
 } from 'lucide-react';
-import { PERSONAL_INFO, PROJECTS } from '../data/portfolioData';
+import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface HeroProps {
   onNavigate?: (page: 'portfolio' | 'cv' | 'brochure') => void;
   onOpenInquiry?: () => void;
 }
 
-// Interactive flagship items for the hero spotlight reel
-const HERO_FLAGSHIP_WORKS = [
+// Curated flagship project slides for the 3D card carousel
+interface ProjectSlide {
+  id: string;
+  title: string;
+  client: string;
+  category: string;
+  badge: string;
+  metrics: string;
+  image: string;
+  fallbackImage: string;
+  url: string;
+  description: string;
+  tech: string[];
+  role: string;
+}
+
+const PROJECT_SLIDES: ProjectSlide[] = [
   {
     id: 'max-brenner',
     title: 'Max Brenner Australia',
-    type: 'Shopify Storefront',
-    url: 'https://max-brenner-cafe.myshopify.com/',
+    client: 'Online Marketing Gurus (OMG)',
+    category: 'Shopify Storefront',
+    badge: 'Flagship Shopify',
     metrics: '99/100 Speed · Custom Theme',
-    tech: ['Shopify Liquid', 'Metaobjects', 'Metafields', 'Custom Theme'],
+    image: '/assets/portfolio/maxbrenner.jpg',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/maxbrenner.jpg',
+    url: 'https://max-brenner-cafe.myshopify.com/',
     description:
       'Fully customized Shopify store for Max Brenner Australia chocolate bar restaurant. Built from scratch with a custom brand theme, custom sections, Metaobjects for location directories, and dynamic Metafields.',
-    badge: 'Flagship Shopify',
-    codeSnippet: `{% comment %} Max Brenner Custom Location Metaobject Loop {% endcomment %}
-{% for location in shop.metaobjects.store_location.values %}
-  <div class="location-card" data-suburb="{{ location.suburb | escape }}">
-    <h3 class="location-title">{{ location.store_name }}</h3>
-    <p class="location-hours">{{ location.trading_hours }}</p>
-    <a href="{{ location.booking_url }}" class="btn-choc-bar">Book Table</a>
-  </div>
-{% endfor %}`,
-    codeLang: 'liquid',
-    codeFile: 'sections/locations-metaobject.liquid'
+    tech: ['Shopify Liquid', 'Metaobjects', 'Metafields', 'Custom Theme'],
+    role: 'Shopify Developer',
   },
   {
     id: 'bedsrus',
-    title: 'Bedsrus Australia',
-    type: 'WordPress Platform',
+    title: 'Beds R Us Australia',
+    client: 'Online Marketing Gurus (OMG)',
+    category: 'WordPress Architecture',
+    badge: 'Custom WP Architecture',
+    metrics: '0.8s LCP · 100% Blocks',
+    image: '/assets/portfolio/bedsrus.jpg',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/bedsrus.jpg',
     url: 'https://bedsrus.com.au/',
-    metrics: '0.8s LCP · Zero Bloat',
-    tech: ['WordPress', 'Custom Templates', 'ACF Pro', 'WP Blocks'],
     description:
       'Custom WordPress templates tailored to exact brand guidelines. Utilized ACF Pro dynamic fields for seamless product details, promotional hero banners, and modular page content.',
-    badge: 'Custom WP Architecture',
-    codeSnippet: `<?php
-/**
- * Bedsrus Modular ACF Block Renderer
- */
-$promo_badge = get_field('promo_badge_text');
-$mattress_specs = get_field('mattress_comfort_layers');
-
-if (!empty($mattress_specs)): ?>
-  <div class="bedsrus-spec-matrix">
-    <?php foreach ($mattress_specs as $spec): ?>
-      <div class="spec-row">
-        <span class="spec-label"><?php echo esc_html($spec['layer_name']); ?></span>
-        <span class="spec-density"><?php echo esc_html($spec['density_rating']); ?></span>
-      </div>
-    <?php endforeach; ?>
-  </div>
-<?php endif; ?>`,
-    codeLang: 'php',
-    codeFile: 'template-parts/acf-mattress-specs.php'
+    tech: ['WordPress', 'ACF Pro', 'Custom Blocks', 'WooCommerce'],
+    role: 'WordPress Developer',
   },
   {
     id: 'wcp',
     title: 'WordPress Comparison Plugin (WCP)',
-    type: 'Commercial AI Plugin',
-    url: 'https://dev.wordpresscomparisonplugin.com/',
+    client: 'Netseek Pty Ltd.',
+    category: 'Commercial AI Plugin',
+    badge: 'Commercial Plugin & AI',
     metrics: 'OpenAI GPT-3 · Aggregator',
-    tech: ['PHP (OOP)', 'OpenAI API', 'REST API', 'Data Aggregator'],
+    image: '/assets/portfolio/wpcomparison.png',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/wpcomparison.png',
+    url: 'https://dev.wordpresscomparisonplugin.com/',
     description:
       'Lead full-stack developer of a major commercial aggregator plugin. Collects and compares content across disparate sources with automated unique content generation via OpenAI GPT-3 models.',
-    badge: 'Commercial Plugin & AI',
-    codeSnippet: `<?php
-/**
- * WCP OpenAI Content Generation Engine
- */
-class WCP_AI_Engine {
-  public static function synthesize_comparison($item_a, $item_b) {
-    $prompt = "Generate a technical comparison matrix between " . $item_a . " and " . $item_b;
-    $response = wp_remote_post('https://api.openai.com/v1/completions', [
-      'headers' => ['Authorization' => 'Bearer ' . WCP_API_KEY],
-      'body'    => json_encode(['model' => 'text-davinci-003', 'prompt' => $prompt, 'max_tokens' => 350])
-    ]);
-    return json_decode(wp_remote_retrieve_body($response), true);
-  }
-}`,
-    codeLang: 'php',
-    codeFile: 'includes/class-wcp-ai-engine.php'
+    tech: ['PHP (OOP)', 'OpenAI API', 'REST API', 'Data Aggregator'],
+    role: 'Lead Plugin Developer',
   },
   {
     id: 'instant-brands',
     title: 'Instant Brands Australia',
-    type: 'Shopify Plus Storefront',
-    url: 'https://instantbrands.com.au/',
+    client: 'Online Marketing Gurus (OMG)',
+    category: 'Shopify Plus Storefront',
+    badge: 'Enterprise eCommerce',
     metrics: 'Corelle, Pyrex, Instant Pot',
-    tech: ['Shopify Theme', 'Metafields', 'Liquid', 'Custom UI'],
+    image: '/assets/portfolio/instantbrand.jpg',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/instantbrand.jpg',
+    url: 'https://instantbrands.com.au/',
     description:
       'Fully customized Shopify theme for multinational kitchenware powerhouse. Integrated Metafields to power dynamic product specifications and high-converting collection page layouts.',
-    badge: 'Enterprise eCommerce',
-    codeSnippet: `{% comment %} Instant Brands Dynamic Recipe & Feature Drawer {% endcomment %}
-<div class="product-features-drawer">
-  {% if product.metafields.instant.pressure_programs %}
-    <ul class="smart-programs-grid">
-      {% for program in product.metafields.instant.pressure_programs.value %}
-        <li class="program-tag"><span class="icon-steam"></span> {{ program }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-</div>`,
-    codeLang: 'liquid',
-    codeFile: 'snippets/product-smart-specs.liquid'
+    tech: ['Shopify Plus', 'Liquid', 'Metafields', 'Custom UI'],
+    role: 'Shopify Developer',
   },
   {
     id: 'reality-events',
     title: 'Reality Events Australia',
-    type: 'WooCommerce + Rental',
+    client: 'Online Marketing Gurus (OMG)',
+    category: 'WooCommerce + Rental',
+    badge: 'Booking & Rental Engine',
+    metrics: 'Booqable Sync · Hire Products',
+    image: '/assets/portfolio/realityevents.png',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/pinoybuilders.png',
     url: 'https://realityevents.com.au/',
-    metrics: 'Booqable Sync · Bookable Products',
-    tech: ['WooCommerce', 'Booqable Integration', 'Figma to WP', 'Add-ons'],
     description:
       'A bespoke WordPress WooCommerce platform with bookable equipment hire. Integrated Booqable rental software, customized product variations, and converted Figma designs into responsive templates.',
-    badge: 'Booking & Rental Engine',
-    codeSnippet: `<?php
-/**
- * Booqable Equipment Rental Hook Integration
- */
-add_action('woocommerce_before_add_to_cart_button', function() {
-  global $product;
-  $booqable_id = get_post_meta($product->get_id(), '_booqable_rental_id', true);
-  if ($booqable_id) {
-    echo '<div class="booqable-date-picker" data-product-sku="' . esc_attr($booqable_id) . '"></div>';
-  }
-});`,
-    codeLang: 'php',
-    codeFile: 'functions/booqable-integration.php'
-  }
+    tech: ['WooCommerce', 'Booqable Software', 'Figma to WP', 'Add-ons'],
+    role: 'WordPress Developer',
+  },
+  {
+    id: 'pinoy-builders',
+    title: 'Pinoy Builders',
+    client: 'iFormat Logic IT Solutions',
+    category: 'Knowledge Hub',
+    badge: 'Figma to Elementor',
+    metrics: 'Mailchimp CRM · Lead Gen',
+    image: '/assets/portfolio/pinoybuilders.png',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/pinoybuilders.png',
+    url: 'https://www.pinoybuilders.ph/',
+    description:
+      'Online construction knowledge hub for design-build experts. Converted Figma designs into WordPress pages and templates using Elementor, integrated Mailchimp CRM for lead generation, and optimized SEO meta elements.',
+    tech: ['WordPress', 'Elementor', 'Mailchimp CRM', 'SEO Meta'],
+    role: 'Full Stack Web Developer',
+  },
+  {
+    id: 'nappy-co',
+    title: 'The Nappy Co',
+    client: 'Direct Enterprise Client',
+    category: 'Laravel Web App',
+    badge: 'Full-Stack Application',
+    metrics: 'Custom DB · Subscriptions',
+    image: '/assets/portfolio/nappy.jpg',
+    fallbackImage: 'https://punisher08.github.io/vuejs/assets/images/portfolio/nappy.jpg',
+    url: 'https://nappy.co/',
+    description:
+      'Full-scale custom Laravel web application with modular database architecture, subscription management, tailored backend reporting, and reactive Vue.js client dashboards.',
+    tech: ['Laravel', 'PHP', 'MySQL', 'Vue.js', 'Tailwind CSS'],
+    role: 'Backend Architect',
+  },
 ];
 
 const ROTATING_TITLES = [
@@ -167,13 +159,31 @@ const ROTATING_TITLES = [
 
 export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [activeProjectIdx, setActiveProjectIdx] = useState(0);
-  const [activeConsoleTab, setActiveConsoleTab] = useState<'preview' | 'code' | 'architecture'>('preview');
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
   const [currentTitleIdx, setCurrentTitleIdx] = useState(0);
-  const [copiedCode, setCopiedCode] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
-  const activeWork = HERO_FLAGSHIP_WORKS[activeProjectIdx];
+  const totalSlides = PROJECT_SLIDES.length;
+
+  const goToNext = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % totalSlides);
+  }, [totalSlides]);
+
+  const goToPrev = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  }, [totalSlides]);
+
+  // Autoplay interval
+  useEffect(() => {
+    if (!isAutoPlaying || isHovered) return;
+    const timer = setInterval(() => {
+      goToNext();
+    }, 4600);
+    return () => clearInterval(timer);
+  }, [isAutoPlaying, isHovered, goToNext]);
 
   // Rotate hero titles with smooth fade
   useEffect(() => {
@@ -182,6 +192,38 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
     }, 3800);
     return () => clearInterval(titleInterval);
   }, []);
+
+  // Touch handlers for mobile swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+    if (distance > minSwipeDistance) {
+      goToNext();
+    } else if (distance < -minSwipeDistance) {
+      goToPrev();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') goToPrev();
+      if (e.key === 'ArrowRight') goToNext();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [goToPrev, goToNext]);
 
   // Out-of-this-world constellation particle background canvas
   useEffect(() => {
@@ -234,7 +276,6 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
       const rect = canvas.getBoundingClientRect();
       mouseX = e.clientX - rect.left;
       mouseY = e.clientY - rect.top;
-      setMousePos({ x: mouseX, y: mouseY });
     };
 
     const handleMouseLeave = () => {
@@ -250,7 +291,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
 
       // Check dark mode
       const isDark = document.documentElement.classList.contains('dark');
-      const baseColor = isDark ? '206, 255, 0' : '34, 197, 94'; // Accent dynamic color
+      const baseColor = isDark ? '206, 255, 0' : '34, 197, 94'; // Dynamic accent
 
       // Draw and update particles
       for (let i = 0; i < particles.length; i++) {
@@ -322,10 +363,12 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
     };
   }, []);
 
-  const handleCopyCode = () => {
-    navigator.clipboard.writeText(activeWork.codeSnippet);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+  // Helper to calculate circular relative index difference (-3 to +3)
+  const getSlideDiff = (index: number, current: number, total: number) => {
+    let diff = index - current;
+    if (diff < -Math.floor(total / 2)) diff += total;
+    if (diff > Math.floor(total / 2)) diff -= total;
+    return diff;
   };
 
   return (
@@ -390,10 +433,10 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
       {/* 3. Main Hero Content Container */}
       <div className="max-w-7xl mx-auto px-6 sm:px-8 relative z-10 w-full">
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
-          {/* Left Column: Personal Engineer Identity & Manifesto (6.5 cols) */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
+          {/* Left Column: Personal Engineer Identity & Manifesto (6 cols) */}
+          <div className="lg:col-span-6 flex flex-col justify-center">
             
             {/* Availability Radar Badge */}
             <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-black/[0.03] dark:bg-white/[0.04] border border-black/[0.08] dark:border-white/[0.08] backdrop-blur-md mb-6 self-start shadow-sm">
@@ -418,7 +461,7 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
                 <span>Craft & Code</span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.08] text-balance">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-[3.5rem] font-bold tracking-tight text-zinc-900 dark:text-white leading-[1.08] text-balance">
                 Hi, I&apos;m{' '}
                 <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-r from-zinc-900 via-zinc-700 to-zinc-900 dark:from-white dark:via-zinc-200 dark:to-white">
                   Jhomel Ignacio
@@ -438,51 +481,51 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
             </div>
 
             {/* Manifesto / Portfolio Bio */}
-            <p className="text-base sm:text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-2xl mb-8">
+            <p className="text-base text-zinc-600 dark:text-zinc-300 leading-relaxed max-w-xl mb-8">
               I architect high-performance websites and bespoke digital storefronts from scratch. Specializing in <span className="font-semibold text-zinc-900 dark:text-white">WordPress custom Gutenberg blocks & themes</span> (with minimal plugin reliance), <span className="font-semibold text-zinc-900 dark:text-white">Shopify Liquid with Metaobjects</span>, and <span className="font-semibold text-zinc-900 dark:text-white">commercial plugins with OpenAI APIs</span>.
             </p>
 
             {/* Verified Developer Impact Numbers */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-5 px-6 rounded-2xl bg-zinc-50/80 dark:bg-[#0F1017]/80 border border-black/[0.06] dark:border-white/[0.08] backdrop-blur-md mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 px-5 rounded-2xl bg-zinc-50/80 dark:bg-[#0F1017]/80 border border-black/[0.06] dark:border-white/[0.08] backdrop-blur-md mb-8">
               <div>
-                <div className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">
+                <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
                   35<span className="text-accent">+</span>
                 </div>
-                <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
+                <div className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
                   Production Sites
                 </div>
               </div>
 
               <div>
-                <div className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">
-                  8<span className="text-accent">+</span>
+                <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
+                  5<span className="text-accent">+</span>
                 </div>
-                <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
+                <div className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
                   Years Crafting
                 </div>
               </div>
 
               <div>
-                <div className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">
+                <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
                   &lt;1.0<span className="text-accent">s</span>
                 </div>
-                <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
+                <div className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
                   Core Web Vitals
                 </div>
               </div>
 
               <div>
-                <div className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white tracking-tight">
+                <div className="font-display text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
                   100<span className="text-accent">%</span>
                 </div>
-                <div className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
+                <div className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase mt-0.5">
                   Custom Blocks
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5 mb-8">
+            <div className="flex flex-wrap items-center gap-3.5 mb-7">
               <a
                 href="#works"
                 className="px-6 py-3.5 text-xs font-semibold text-accent-fg bg-accent hover:opacity-90 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-lg shadow-accent/20 active:scale-95 uppercase tracking-wide"
@@ -514,12 +557,12 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
             </div>
 
             {/* Core Tech Stack Micro Badges */}
-            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+            <div className="flex flex-wrap items-center gap-1.5 text-xs font-mono">
               <span className="text-zinc-400 dark:text-zinc-500 text-[11px] mr-1 uppercase">Stack:</span>
               {['WordPress & ACF Pro', 'Shopify Liquid', 'Metaobjects', 'PHP / Laravel', 'OpenAI API', 'Tailwind CSS'].map((tech, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-1 rounded-md bg-black/[0.03] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.05] dark:border-white/[0.05] text-[11px] hover:border-accent hover:text-accent transition-colors cursor-default"
+                  className="px-2 py-0.5 rounded-md bg-black/[0.03] dark:bg-white/[0.04] text-zinc-700 dark:text-zinc-300 border border-black/[0.05] dark:border-white/[0.05] text-[11px] hover:border-accent hover:text-accent transition-colors cursor-default"
                 >
                   {tech}
                 </span>
@@ -528,286 +571,260 @@ export const Hero: React.FC<HeroProps> = ({ onNavigate, onOpenInquiry }) => {
 
           </div>
 
-          {/* Right Column: Out-of-this-world Interactive Developer Spotlight & Terminal Cockpit (5.5 cols) */}
-          <div className="lg:col-span-5 relative">
-            
-            {/* Ambient Background Backlight */}
+          {/* Right Column: 3D Project Card Slider with Prev, Active & Next Deck (6 cols) */}
+          <div 
+            className="lg:col-span-6 relative flex flex-col items-center justify-center pt-4 select-none"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {/* Ambient Background Backlight Glow */}
             <div 
-              className="absolute -inset-1 rounded-3xl opacity-20 dark:opacity-30 blur-2xl -z-10 animate-pulse-glow"
+              className="absolute w-[360px] h-[360px] rounded-full opacity-25 dark:opacity-35 blur-[120px] -z-10 animate-pulse-glow pointer-events-none"
               style={{ background: 'var(--accent)' }}
               aria-hidden="true"
             />
 
-            {/* Floating Achievement Capsule Top Left */}
-            <div className="absolute -top-5 -left-4 z-20 px-3 py-1.5 rounded-xl bg-white/95 dark:bg-[#12131D]/95 border border-black/10 dark:border-white/15 shadow-xl backdrop-blur-md flex items-center gap-2 text-xs font-mono animate-float-slow hidden sm:flex">
+            {/* Floating Live Badge Top Left */}
+            <div className="absolute -top-4 left-4 z-40 px-3 py-1 rounded-full bg-white/90 dark:bg-[#12131D]/90 border border-black/10 dark:border-white/15 shadow-lg backdrop-blur-md flex items-center gap-2 text-[11px] font-mono animate-float-slow">
               <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="font-semibold text-zinc-900 dark:text-white">Sub-Second LCP</span>
+              <span className="font-semibold text-zinc-900 dark:text-white">Featured Production Works</span>
               <span className="text-zinc-400">·</span>
-              <span className="text-accent font-semibold">99/100 Core Web Vitals</span>
+              <span className="text-accent font-semibold">Live Client Deployments</span>
             </div>
 
-            {/* Floating Achievement Capsule Bottom Right */}
-            <div className="absolute -bottom-5 -right-3 z-20 px-3 py-1.5 rounded-xl bg-white/95 dark:bg-[#12131D]/95 border border-black/10 dark:border-white/15 shadow-xl backdrop-blur-md flex items-center gap-2 text-xs font-mono animate-float-reverse hidden sm:flex">
-              <Boxes size={13} className="text-accent" />
-              <span className="font-semibold text-zinc-900 dark:text-white">Minimal Plugins</span>
-              <span className="text-zinc-400">·</span>
-              <span className="text-zinc-500 dark:text-zinc-400">100% Custom Blocks</span>
-            </div>
-
-            {/* Main Interactive Glass Console Terminal */}
-            <div className="bg-white/90 dark:bg-[#0E0F17]/90 border border-black/10 dark:border-white/10 rounded-2xl shadow-2xl backdrop-blur-xl overflow-hidden flex flex-col">
+            {/* 3D Carousel Stage */}
+            <div className="relative w-full h-[470px] sm:h-[490px] flex items-center justify-center overflow-visible">
               
-              {/* Terminal Window Header Bar */}
-              <div className="px-4 py-3 bg-zinc-100/80 dark:bg-[#151622]/80 border-b border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
-                
-                {/* Window Traffic Lights */}
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 ml-2 font-medium">
-                    jhomel@portfolio:~/flagship
-                  </span>
-                </div>
+              {PROJECT_SLIDES.map((slide, idx) => {
+                const diff = getSlideDiff(idx, currentSlide, totalSlides);
+                const isActive = diff === 0;
+                const isPrev = diff === -1;
+                const isNext = diff === 1;
 
-                {/* Console Navigation Tabs */}
-                <div className="flex items-center gap-1 bg-black/[0.04] dark:bg-black/40 p-1 rounded-lg">
-                  <button
-                    type="button"
-                    onClick={() => setActiveConsoleTab('preview')}
-                    className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-md transition-all ${
-                      activeConsoleTab === 'preview'
-                        ? 'bg-white dark:bg-[#1F202E] text-zinc-900 dark:text-white shadow-xs'
-                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                    }`}
-                  >
-                    Live Spotlight
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveConsoleTab('code')}
-                    className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-md transition-all ${
-                      activeConsoleTab === 'code'
-                        ? 'bg-white dark:bg-[#1F202E] text-zinc-900 dark:text-white shadow-xs'
-                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                    }`}
-                  >
-                    Code Under The Hood
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveConsoleTab('architecture')}
-                    className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-md transition-all ${
-                      activeConsoleTab === 'architecture'
-                        ? 'bg-white dark:bg-[#1F202E] text-zinc-900 dark:text-white shadow-xs'
-                        : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                    }`}
-                  >
-                    Architecture Radar
-                  </button>
-                </div>
-              </div>
+                // Only render active, prev, and next slides for optimal performance and crisp 3D depth
+                if (Math.abs(diff) > 1) {
+                  return (
+                    <div
+                      key={slide.id}
+                      className="absolute w-[300px] sm:w-[360px] opacity-0 pointer-events-none transition-all duration-500 ease-out"
+                      style={{
+                        transform: `translateX(${diff > 0 ? '80%' : '-80%'}) scale(0.7)`,
+                        zIndex: 0,
+                      }}
+                      aria-hidden="true"
+                    />
+                  );
+                }
 
-              {/* Console Body Tab 1: Live Project Spotlight */}
-              {activeConsoleTab === 'preview' && (
-                <div className="p-6 flex flex-col justify-between">
-                  
-                  {/* Project Selector Pills */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto pb-3 mb-4 scrollbar-none border-b border-black/[0.06] dark:border-white/[0.06]">
-                    {HERO_FLAGSHIP_WORKS.map((work, idx) => (
-                      <button
-                        key={work.id}
-                        type="button"
-                        onClick={() => setActiveProjectIdx(idx)}
-                        className={`px-2.5 py-1 text-[11px] font-mono whitespace-nowrap rounded-md transition-all ${
-                          activeProjectIdx === idx
-                            ? 'bg-accent text-accent-fg font-semibold shadow-xs'
-                            : 'bg-zinc-100 dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
-                        }`}
-                      >
-                        {work.title.split(' ')[0]}
-                      </button>
-                    ))}
-                  </div>
+                return (
+                  <div
+                    key={slide.id}
+                    onClick={() => {
+                      if (isPrev) goToPrev();
+                      if (isNext) goToNext();
+                    }}
+                    className={`absolute w-[300px] sm:w-[365px] md:w-[385px] transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] rounded-2xl ${
+                      isActive
+                        ? 'z-30 cursor-default scale-100 sm:scale-[1.03] opacity-100 shadow-2xl shadow-accent/20 ring-1 ring-accent/40'
+                        : isPrev
+                        ? 'z-20 cursor-pointer -translate-x-[52%] sm:-translate-x-[48%] scale-[0.88] opacity-45 hover:opacity-75 blur-[0.4px] shadow-lg hover:scale-[0.90]'
+                        : 'z-20 cursor-pointer translate-x-[52%] sm:translate-x-[48%] scale-[0.88] opacity-45 hover:opacity-75 blur-[0.4px] shadow-lg hover:scale-[0.90]'
+                    }`}
+                    style={{
+                      transformOrigin: 'center center',
+                    }}
+                  >
+                    {/* Card Container */}
+                    <div className="bg-white/95 dark:bg-[#0E0F17]/95 border border-black/10 dark:border-white/10 rounded-2xl overflow-hidden backdrop-blur-xl flex flex-col justify-between h-[450px] sm:h-[465px]">
+                      
+                      {/* 1. Preview Header & Image */}
+                      <div className="relative h-44 sm:h-48 w-full overflow-hidden bg-zinc-900 group">
+                        
+                        {/* Project Preview Image */}
+                        <img
+                          src={slide.image}
+                          alt={slide.title}
+                          onError={(e) => {
+                            // Fallback to online image if local asset path is missing
+                            const target = e.currentTarget;
+                            if (target.src !== slide.fallbackImage) {
+                              target.src = slide.fallbackImage;
+                            }
+                          }}
+                          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                        />
 
-                  {/* Active Project Highlight Card */}
-                  <div className="space-y-4">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-accent/15 text-accent font-semibold border border-accent/25">
-                            {activeWork.badge}
+                        {/* Scrim Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/30 pointer-events-none" />
+
+                        {/* Top Badges */}
+                        <div className="absolute top-3 inset-x-3 flex items-center justify-between gap-2 z-10">
+                          <span className="px-2.5 py-1 rounded-md text-[10px] font-mono uppercase font-semibold bg-black/60 text-white backdrop-blur-md border border-white/20">
+                            {slide.category}
                           </span>
-                          <span className="text-xs font-mono text-zinc-500 dark:text-zinc-400">
-                            {activeWork.type}
+
+                          <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-accent text-accent-fg font-bold shadow-xs">
+                            {slide.badge}
                           </span>
                         </div>
-                        <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white leading-tight">
-                          {activeWork.title}
-                        </h3>
+
+                        {/* Bottom Image Overlay: Title & Verified Metric */}
+                        <div className="absolute bottom-3 inset-x-3 z-10 flex items-end justify-between gap-2">
+                          <div>
+                            <h3 className="font-display text-lg sm:text-xl font-bold text-white drop-shadow-md leading-tight line-clamp-1">
+                              {slide.title}
+                            </h3>
+                            <p className="text-[11px] font-mono text-zinc-300 drop-shadow-xs flex items-center gap-1.5 mt-0.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                              <span>{slide.client}</span>
+                            </p>
+                          </div>
+
+                          {slide.url && (
+                            <a
+                              href={slide.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="p-2 rounded-lg bg-white/20 hover:bg-accent text-white hover:text-accent-fg transition-all backdrop-blur-md shrink-0 shadow-sm"
+                              title="Visit live site"
+                            >
+                              <ExternalLink size={14} />
+                            </a>
+                          )}
+                        </div>
+
+                        {/* Interactive Hint on inactive slides */}
+                        {!isActive && (
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                            <span className="px-3 py-1 rounded-full bg-accent text-accent-fg text-xs font-mono font-semibold flex items-center gap-1.5 shadow-md">
+                              <MousePointerClick size={13} />
+                              <span>Click to View</span>
+                            </span>
+                          </div>
+                        )}
                       </div>
 
-                      {activeWork.url && (
-                        <a
-                          href={activeWork.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="px-3 py-1.5 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] hover:bg-accent hover:text-accent-fg text-zinc-800 dark:text-white text-xs font-mono flex items-center gap-1.5 transition-all group shrink-0"
-                          title="Open live website"
-                        >
-                          <span>Live Site</span>
-                          <ExternalLink size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                        </a>
-                      )}
-                    </div>
+                      {/* 2. Card Content Body */}
+                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                          {/* Performance Metric Pill */}
+                          <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-[#151622] border border-black/[0.05] dark:border-white/[0.05] flex items-center justify-between text-xs font-mono mb-3">
+                            <div className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
+                              <Activity size={13} className="text-accent shrink-0" />
+                              <span className="text-[11px] font-semibold">{slide.metrics}</span>
+                            </div>
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                          </div>
 
-                    <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                      {activeWork.description}
-                    </p>
+                          {/* Description */}
+                          <p className="text-xs text-zinc-600 dark:text-zinc-300 line-clamp-3 leading-relaxed mb-3">
+                            {slide.description}
+                          </p>
 
-                    {/* Live Metrics Line */}
-                    <div className="p-3 rounded-xl bg-zinc-50 dark:bg-[#151622] border border-black/[0.05] dark:border-white/[0.05] flex items-center justify-between text-xs font-mono">
-                      <div className="flex items-center gap-2">
-                        <Activity size={14} className="text-accent" />
-                        <span className="text-zinc-500 dark:text-zinc-400">Verified Metric:</span>
-                        <span className="font-semibold text-zinc-900 dark:text-white">{activeWork.metrics}</span>
+                          {/* Tech Stack Chips */}
+                          <div className="flex flex-wrap gap-1 mb-2">
+                            {slide.tech.map((t, i) => (
+                              <span
+                                key={i}
+                                className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-100 dark:bg-white/[0.05] text-zinc-700 dark:text-zinc-300 border border-black/[0.04] dark:border-white/[0.04]"
+                              >
+                                {t}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 3. Action Footer for Active Slide */}
+                        <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between">
+                          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400">
+                            Role: <span className="text-zinc-900 dark:text-white font-medium">{slide.role}</span>
+                          </span>
+
+                          {slide.url ? (
+                            <a
+                              href={slide.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="text-xs font-semibold font-mono text-accent hover:underline flex items-center gap-1"
+                            >
+                              <span>Open Live Site</span>
+                              <ExternalLink size={12} />
+                            </a>
+                          ) : (
+                            <span className="text-[11px] font-mono text-accent">Production Verified</span>
+                          )}
+                        </div>
+
                       </div>
-                      <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    </div>
 
-                    {/* Technologies */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {activeWork.tech.map((t, i) => (
-                        <span
-                          key={i}
-                          className="px-2 py-0.5 rounded text-[10px] font-mono bg-zinc-100 dark:bg-white/[0.04] text-zinc-600 dark:text-zinc-400"
-                        >
-                          {t}
-                        </span>
-                      ))}
                     </div>
-
-                    {/* Quick Code Peek Switcher */}
-                    <div className="pt-2 flex items-center justify-between text-[11px] font-mono text-zinc-500">
-                      <span>Source file: {activeWork.codeFile}</span>
-                      <button
-                        type="button"
-                        onClick={() => setActiveConsoleTab('code')}
-                        className="text-accent hover:underline flex items-center gap-1"
-                      >
-                        <Terminal size={12} />
-                        <span>Inspect Code</span>
-                      </button>
-                    </div>
-
                   </div>
+                );
+              })}
 
-                </div>
-              )}
+            </div>
 
-              {/* Console Body Tab 2: Syntax Highlighted Code Viewer */}
-              {activeConsoleTab === 'code' && (
-                <div className="p-4 flex flex-col justify-between">
-                  <div className="flex items-center justify-between mb-3 pb-2 border-b border-black/[0.06] dark:border-white/[0.06]">
-                    <div className="flex items-center gap-2 text-xs font-mono text-zinc-700 dark:text-zinc-300">
-                      <Code2 size={14} className="text-accent" />
-                      <span className="font-semibold">{activeWork.codeFile}</span>
-                    </div>
+            {/* Carousel Navigation Bar & Slide Indicators */}
+            <div className="mt-4 flex items-center justify-between w-full max-w-[380px] px-2 z-40">
+              
+              {/* Prev Button */}
+              <button
+                type="button"
+                onClick={goToPrev}
+                className="p-2.5 rounded-xl bg-white/80 dark:bg-[#12131D]/80 hover:bg-accent hover:text-accent-fg text-zinc-800 dark:text-white border border-black/10 dark:border-white/10 shadow-md backdrop-blur-md transition-all active:scale-95"
+                title="Previous Project (Left Arrow)"
+              >
+                <ChevronLeft size={16} />
+              </button>
 
+              {/* Dots & Counter */}
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="flex items-center gap-1.5">
+                  {PROJECT_SLIDES.map((_, i) => (
                     <button
+                      key={i}
                       type="button"
-                      onClick={handleCopyCode}
-                      className="px-2.5 py-1 text-[11px] font-mono rounded bg-black/[0.04] dark:bg-white/[0.05] hover:bg-black/[0.08] dark:hover:bg-white/[0.1] text-zinc-700 dark:text-zinc-300 flex items-center gap-1 transition-colors"
-                      title="Copy code snippet"
-                    >
-                      {copiedCode ? <Check size={12} className="text-accent" /> : <Copy size={12} />}
-                      <span>{copiedCode ? 'Copied!' : 'Copy'}</span>
-                    </button>
-                  </div>
-
-                  <pre className="p-3.5 rounded-xl bg-zinc-950 text-zinc-100 font-mono text-[11px] leading-relaxed overflow-x-auto max-h-[260px] scrollbar-thin">
-                    <code>{activeWork.codeSnippet}</code>
-                  </pre>
-
-                  <div className="mt-3 flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                    <span>Clean syntax · Hand-crafted implementation</span>
-                    <button
-                      type="button"
-                      onClick={() => setActiveConsoleTab('preview')}
-                      className="text-accent hover:underline"
-                    >
-                      Back to live view →
-                    </button>
-                  </div>
+                      onClick={() => setCurrentSlide(i)}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        i === currentSlide
+                          ? 'w-6 bg-accent shadow-[0_0_8px_var(--accent)]'
+                          : 'w-2 bg-zinc-300 dark:bg-zinc-700 hover:bg-zinc-400 dark:hover:bg-zinc-500'
+                      }`}
+                      title={`Go to slide ${i + 1}`}
+                    />
+                  ))}
                 </div>
-              )}
 
-              {/* Console Body Tab 3: Architecture Radar */}
-              {activeConsoleTab === 'architecture' && (
-                <div className="p-6 space-y-4">
-                  <div className="text-xs font-mono text-accent font-semibold flex items-center gap-1.5">
-                    <Layers size={14} />
-                    <span>ZERO-BLOAT ARCHITECTURE PIPELINE</span>
-                  </div>
-
-                  <div className="space-y-3 text-xs">
-                    <div className="p-3 rounded-xl bg-zinc-50 dark:bg-[#151622] border border-black/[0.06] dark:border-white/[0.06] flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-accent/20 text-accent flex items-center justify-center font-mono text-[10px] font-bold shrink-0 mt-0.5">
-                        01
-                      </div>
-                      <div>
-                        <div className="font-display font-bold text-zinc-900 dark:text-white">Figma to Native Blocks</div>
-                        <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-0.5">
-                          Pixel-perfect conversion into bespoke Gutenberg blocks or Shopify Liquid sections with zero unnecessary DIV wrappers.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-zinc-50 dark:bg-[#151622] border border-black/[0.06] dark:border-white/[0.06] flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-accent/20 text-accent flex items-center justify-center font-mono text-[10px] font-bold shrink-0 mt-0.5">
-                        02
-                      </div>
-                      <div>
-                        <div className="font-display font-bold text-zinc-900 dark:text-white">ACF & Shopify Metaobjects</div>
-                        <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-0.5">
-                          Structured dynamic schemas allowing store owners and editors to update products, locations, and banners with ease.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="p-3 rounded-xl bg-zinc-50 dark:bg-[#151622] border border-black/[0.06] dark:border-white/[0.06] flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-accent/20 text-accent flex items-center justify-center font-mono text-[10px] font-bold shrink-0 mt-0.5">
-                        03
-                      </div>
-                      <div>
-                        <div className="font-display font-bold text-zinc-900 dark:text-white">Sub-Second Speed & Edge Caching</div>
-                        <p className="text-[11px] text-zinc-600 dark:text-zinc-400 mt-0.5">
-                          Aggressive asset optimization, responsive WebP/AVIF images, and minimal JavaScript for instant Lighthouse 95+ scores.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 text-center">
-                    <a
-                      href="#about"
-                      className="text-xs font-mono text-accent hover:underline inline-flex items-center gap-1"
-                    >
-                      <span>Read Engineering Philosophy</span>
-                      <ArrowDown size={12} />
-                    </a>
-                  </div>
+                <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-500 dark:text-zinc-400">
+                  <span>0{currentSlide + 1} / 0{totalSlides}</span>
+                  <span aria-hidden="true">·</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+                    className="hover:text-accent flex items-center gap-0.5"
+                    title={isAutoPlaying ? 'Pause autoplay' : 'Start autoplay'}
+                  >
+                    {isAutoPlaying ? <Pause size={10} /> : <Play size={10} />}
+                    <span>{isAutoPlaying ? 'Playing' : 'Paused'}</span>
+                  </button>
                 </div>
-              )}
-
-              {/* Terminal Footer Bar */}
-              <div className="px-4 py-2 bg-zinc-50/70 dark:bg-[#12131D]/70 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-zinc-500">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-                  <span>JHOMEL_CORE_V8.4</span>
-                </span>
-                <span>Active Stack: WordPress · Shopify · PHP · AI</span>
               </div>
+
+              {/* Next Button */}
+              <button
+                type="button"
+                onClick={goToNext}
+                className="p-2.5 rounded-xl bg-white/80 dark:bg-[#12131D]/80 hover:bg-accent hover:text-accent-fg text-zinc-800 dark:text-white border border-black/10 dark:border-white/10 shadow-md backdrop-blur-md transition-all active:scale-95"
+                title="Next Project (Right Arrow)"
+              >
+                <ChevronRight size={16} />
+              </button>
 
             </div>
 

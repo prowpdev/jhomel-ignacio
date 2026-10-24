@@ -18,7 +18,14 @@ import {
   Layers,
   Globe
 } from 'lucide-react';
-import { PERSONAL_INFO, PROJECTS, CV_EXPERIENCES, CV_EDUCATION } from '../data/portfolioData';
+import { 
+  PERSONAL_INFO, 
+  PROJECTS, 
+  CV_EXPERIENCES, 
+  CV_EDUCATION,
+  CV_PROFESSIONAL_SUMMARY,
+  CV_SKILLS_AND_QUALITIES
+} from '../data/portfolioData';
 
 interface CVPageProps {
   onBackToPortfolio: () => void;
@@ -50,7 +57,7 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
       name: 'Technical Director & Delivery Lead',
       relationship: 'Agency Supervisor & Direct Client Lead',
       organization: 'Online Marketing Gurus (OMG) / Australian Brands',
-      context: 'Direct collaboration on high-traffic Shopify stores (Max Brenner, Instant Brands, Rapha Herbals) and custom WordPress projects (Bedsrus, Reality Events).',
+      context: 'Direct collaboration on high-traffic client websites and stores including Rivergum Homes, Instant Brands, Nappy, and Dahlia and Friends.',
       contactStatus: 'Direct contact details and reference check available upon request.',
     },
     {
@@ -61,10 +68,10 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
       contactStatus: 'Letter of recommendation and verification available on request.',
     },
     {
-      name: 'Engineering Director & Senior Mentor',
-      relationship: 'Former Technical Lead & Department Head',
-      organization: 'iFormat Logic IT Solutions',
-      context: 'Supervised full-stack web builds across Laravel, Shopify, Magento, OpenCart, and WordPress, resulting in promotion to lead a small squad of developers.',
+      name: 'Operations & Engineering Director',
+      relationship: 'Technical Director & Project Lead',
+      organization: 'Purplebug Inc. / iFormat Logic IT Solutions',
+      context: 'Supervised full-stack web builds across WordPress, Shopify, Magento, OpenCart, and Laravel, resulting in promotion to oversee a small squad of developers.',
       contactStatus: 'Verified endorsement and references available upon request.',
     },
   ];
@@ -209,85 +216,72 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
           </div>
         </header>
 
-        {/* Section 1: Executive Summary */}
+        {/* Section 1: Professional Summary */}
         <section className="mb-10 print:mb-6">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-3 flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.06] pb-2 font-semibold">
-            <span className="text-accent">01.</span> Executive Technical Summary
+            <span className="text-accent">01.</span> Professional Summary
           </h2>
           <p className="text-sm sm:text-base text-zinc-700 dark:text-zinc-300 leading-relaxed font-normal">
-            Web Designer and WordPress / Shopify Developer with extensive commercial experience designing, developing, and deploying high-performance eCommerce platforms, custom WordPress themes & blocks, bespoke Elementor widgets, and commercial WordPress plugins. Proven track record across <span className="font-semibold text-zinc-900 dark:text-white">Summit Web Solutions</span>, <span className="font-semibold text-zinc-900 dark:text-white">Online Marketing Gurus (OMG)</span>, <span className="font-semibold text-zinc-900 dark:text-white">Netseek Pty Ltd.</span>, and <span className="font-semibold text-zinc-900 dark:text-white">iFormat Logic</span>—handling full-cycle development from Figma UI/UX to server infrastructure, ACF, Shopify Metafields & Metaobjects, OpenAI GPT-3 API integrations, and leading development teams.
+            {CV_PROFESSIONAL_SUMMARY}
           </p>
         </section>
 
-        {/* Section 2: Core Technical Competencies */}
+        {/* Section 2: Skills and Qualities */}
         <section className="mb-10 print:mb-6">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-4 flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.06] pb-2 font-semibold">
-            <span className="text-accent">02.</span> Technical Skills & Stack
+            <span className="text-accent">02.</span> Skills and Qualities
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-xs">
+          {/* Key Qualities Bullet Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-5">
+            {CV_SKILLS_AND_QUALITIES.map((quality, qIdx) => (
+              <div 
+                key={qIdx}
+                className="p-3 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06] flex items-start gap-2.5 text-xs text-zinc-800 dark:text-zinc-200"
+              >
+                <Check size={14} className="text-accent shrink-0 mt-0.5" />
+                <span className="leading-relaxed font-medium">{quality}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Technical Stack Domains */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs">
             
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                WordPress & Block Architecture
+                Languages & Frontend
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Custom In-House WP Themes, Custom Gutenberg Blocks, Elementor (Custom Widgets), Advanced Custom Fields (ACF Pro), Minimal Plugin Architecture, WooCommerce.
+                PHP (OOP), MySQL, HTML, CSS, SASS, JavaScript (ES6+), Modern Frameworks & API Integrations.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                Shopify Development
+                WordPress & Shopify
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Custom Shopify Themes from scratch, Liquid Sections & Templates, Metafields & Metaobjects, Storefront Customization, PayMongo & Payment Integrations.
+                Custom WordPress Themes, Gutenberg / WordPress Blocks, WooCommerce, ACF Pro, Gravity Forms, Shopify Theme Development from scratch, Liquid, Metafields & Metaobjects.
               </p>
             </div>
 
             <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
               <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                Figma to Web & UI/UX
+                DevOps & Architecture
               </h3>
               <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Pixel-perfect Figma to WordPress blocks conversion, Figma to Shopify liquid, UI/UX prototyping, responsive design across mobile/desktop, cross-browser QA.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
-              <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                Full-Stack & Commercial Plugins
-              </h3>
-              <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Commercial WordPress Plugin Development (WCP Aggregator, Proof Alert), PHP (OOP), Laravel, Magento, OpenCart, RESTful APIs, MySQL, Booqable Rental Software.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
-              <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                AI & Workflow Integrations
-              </h3>
-              <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                OpenAI API Engine (GPT-3: ada, babbage, curie, davinci) for automated unique content generation, Zapier Webhooks, Mailchimp CRM, Lead Capture Funnels.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-[#141520] border border-black/[0.06] dark:border-white/[0.06]">
-              <h3 className="font-mono text-xs uppercase text-accent font-semibold mb-2">
-                Infrastructure & Performance
-              </h3>
-              <p className="text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                Page Speed & Core Web Vitals optimization, Server & Hosting Management, DNS Routing, SSL Configuration, Technical SEO Meta elements & Google Ads setup.
+                Webpack, Docker, Pantheon, Lando, CI/CD with GitHub Workflows, Laravel, PostgreSQL, Divi, Elementor, Mailchimp, MailerLite, OpenAI GPT-3 API.
               </p>
             </div>
 
           </div>
         </section>
 
-        {/* Section 3: Professional Experience History */}
+        {/* Section 3: Work Experience */}
         <section className="mb-10 print:mb-6">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-6 flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.06] pb-2 font-semibold">
-            <span className="text-accent">03.</span> Professional Experience
+            <span className="text-accent">03.</span> Work Experience
           </h2>
 
           <div className="space-y-10">
@@ -454,10 +448,10 @@ export const CVPage: React.FC<CVPageProps> = ({ onBackToPortfolio, onOpenInquiry
           </div>
         </section>
 
-        {/* Section 5: Education & Credentials */}
+        {/* Section 5: Educational Background */}
         <section className="mb-10 print:mb-6">
           <h2 className="text-xs font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400 mb-4 flex items-center gap-2 border-b border-black/[0.06] dark:border-white/[0.06] pb-2 font-semibold">
-            <span className="text-accent">05.</span> Education & Campus Leadership
+            <span className="text-accent">05.</span> Educational Background
           </h2>
 
           <div className="space-y-3 text-xs">

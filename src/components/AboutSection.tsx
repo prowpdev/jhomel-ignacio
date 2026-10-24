@@ -32,7 +32,7 @@ export const AboutSection: React.FC = () => {
           {/* Left Column: Narrative (7 cols) */}
           <div className="lg:col-span-7 space-y-6 text-zinc-700 dark:text-zinc-300 leading-relaxed text-base">
             <p className="text-lg text-zinc-900 dark:text-white font-normal leading-relaxed">
-              I specialize in turning ambitious project roadmaps into clean, performant, and reliable digital products. For more than 8 years, I&apos;ve worked closely with founder-led startups, eCommerce retailers, and agencies across Australia, the United States, and the Philippines.
+              I specialize in turning ambitious project roadmaps into clean, performant, and reliable digital products. For more than 5 years, I&apos;ve worked closely with founder-led startups, eCommerce retailers, and agencies across Australia, the United States, and the Philippines.
             </p>
 
             <p>
@@ -81,7 +81,7 @@ export const AboutSection: React.FC = () => {
               </div>
               <div className="flex items-center justify-between py-1 border-b border-black/[0.04] dark:border-white/[0.04]">
                 <span className="text-zinc-500 dark:text-zinc-400 font-mono">Industry Experience</span>
-                <span className="text-zinc-900 dark:text-white font-medium font-mono tabular-nums">8+ Years Full-Stack</span>
+                <span className="text-zinc-900 dark:text-white font-medium font-mono tabular-nums">5+ Years Full-Stack</span>
               </div>
               <div className="flex items-center justify-between py-1 border-b border-black/[0.04] dark:border-white/[0.04]">
                 <span className="text-zinc-500 dark:text-zinc-400 font-mono">Production Works</span>
