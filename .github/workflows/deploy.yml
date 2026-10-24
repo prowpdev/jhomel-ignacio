@@ -16,26 +16,32 @@ concurrency:
 
 jobs:
   deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Download repository source code
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
+      # 2. Install Node.js for the React build
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
 
+      # 3. Install dependencies
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Build React frontend
+      # 4. Build React + TypeScript for production
+      - name: Build frontend
         run: npm run build
         env:
           VITE_API_URL: /api
 
+      # 5. Deploy React production files to the domain root
       - name: Deploy React frontend
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -45,13 +51,14 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: dist/
-          server-dir: /public_html/jhomelignacio.site/
+          server-dir: /public_html/jhomeligacio.site/
           state-name: .ftp-sync-frontend.json
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
 
+      # 6. Deploy PHP API files
       - name: Deploy PHP API
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -61,7 +68,7 @@ jobs:
           protocol: ftps
           port: 21
           local-dir: api/
-          server-dir: /public_html/jhomelignacio.site/api/
+          server-dir: /public_html/jhomeligacio.site/api/
           state-name: .ftp-sync-api.json
           exclude: |
             **/.git*
